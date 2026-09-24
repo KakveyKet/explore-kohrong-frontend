@@ -124,10 +124,6 @@ function plainText(value) {
     return "";
   }
 
-  /*
-   * Browser environment.
-   */
-
   const element = document.createElement("div");
 
   element.innerHTML = html;
@@ -141,35 +137,14 @@ function plainText(value) {
 |--------------------------------------------------------------------------
 | VIEW SERVICE DETAIL
 |--------------------------------------------------------------------------
-|
-| New flow:
-|
-| Home
-|   ↓
-| Service Detail
-|   ↓
-| Booking
-|
 */
 
 function viewService(item) {
   const id = String(item?._id || "").trim();
 
-  /*
-  |--------------------------------------------------------------------------
-  | VALIDATE MONGO ID
-  |--------------------------------------------------------------------------
-  */
-
   if (!id || !/^[a-fA-F0-9]{24}$/.test(id)) {
     return;
   }
-
-  /*
-  |--------------------------------------------------------------------------
-  | GO TO SERVICE DETAIL
-  |--------------------------------------------------------------------------
-  */
 
   router.push({
     name: "service-detail",
@@ -225,11 +200,15 @@ onMounted(loadServices);
 
       <div class="mb-7 flex items-end justify-between gap-4">
         <div>
+          <!-- SMALL LABEL -->
+
           <p
             class="text-xs font-semibold uppercase tracking-[0.18em] text-primary-600 sm:text-sm"
           >
             Explore Koh Rong
           </p>
+
+          <!-- TITLE -->
 
           <h2
             class="mt-2 text-2xl font-bold tracking-tight text-heading sm:text-3xl lg:text-4xl"
@@ -237,7 +216,9 @@ onMounted(loadServices);
             Our Most Popular Adventures
           </h2>
 
-          <p class="mt-2 max-w-2xl text-sm leading-6 text-muted sm:text-base">
+          <!-- DESCRIPTION -->
+
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-black sm:text-base">
             Discover exciting island experiences and explore the details, photos
             and customer reviews before booking.
           </p>
@@ -372,7 +353,7 @@ onMounted(loadServices);
 
             <div class="absolute left-4 top-4">
               <span
-                class="inline-flex items-center rounded-full bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm"
+                class="inline-flex items-center rounded-full bg-white px-4 py-2 text-xs font-semibold text-black shadow-sm"
               >
                 {{ categoryName(item) }}
               </span>
@@ -410,7 +391,7 @@ onMounted(loadServices);
 
             <p
               v-if="plainText(item.description)"
-              class="mt-6 line-clamp-2 min-h-[48px] text-sm leading-6 text-muted"
+              class="mt-6 line-clamp-2 min-h-[48px] text-sm leading-6 text-black"
             >
               {{ plainText(item.description) }}
             </p>
@@ -461,7 +442,7 @@ onMounted(loadServices);
           No adventures available yet
         </h3>
 
-        <p class="mt-1 text-sm text-muted">
+        <p class="mt-1 text-sm text-black">
           New island experiences will be added soon.
         </p>
       </div>

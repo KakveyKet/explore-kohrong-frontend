@@ -1,11 +1,8 @@
 <template>
   <main class="bg-white">
-    <!-- ====================================================== -->
-    <!-- CONTACT INFORMATION -->
-    <!-- ====================================================== -->
-    <!-- ====================================================== -->
-    <!-- FULL WIDTH COVER -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         FULL WIDTH COVER
+    ======================================================= -->
 
     <section
       class="relative h-[260px] overflow-hidden sm:h-[320px] lg:h-[380px]"
@@ -36,11 +33,15 @@
         class="page relative z-10 flex h-full items-end pb-8 sm:pb-10 lg:pb-12"
       >
         <div class="max-w-2xl">
+          <!-- EYEBROW -->
+
           <p
             class="text-xs font-semibold uppercase tracking-[0.2em] text-secondary-300 sm:text-sm"
           >
             Discover The Island
           </p>
+
+          <!-- TITLE -->
 
           <h2
             class="mt-2 text-2xl font-bold leading-tight text-white sm:text-3xl lg:text-4xl"
@@ -48,22 +49,33 @@
             Experience the Beauty of Koh Rong
           </h2>
 
-          <p class="mt-3 max-w-xl text-sm leading-6 text-white/80 sm:text-base">
+          <!-- DESCRIPTION -->
+
+          <p class="mt-3 max-w-xl text-sm leading-6 text-white sm:text-base">
             Beautiful beaches, crystal clear water and unforgettable island
             experiences are waiting for you.
           </p>
         </div>
       </div>
     </section>
+
+    <!-- ======================================================
+         CONTACT INFORMATION
+    ======================================================= -->
+
     <section class="page py-10 sm:py-12 lg:py-14">
       <!-- HEADER -->
 
       <div class="mx-auto max-w-3xl text-center">
+        <!-- EYEBROW -->
+
         <p
           class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 sm:text-sm"
         >
           Explore Koh Rong
         </p>
+
+        <!-- TITLE -->
 
         <h1
           class="mt-2 text-3xl font-bold tracking-tight text-heading sm:text-4xl"
@@ -71,17 +83,19 @@
           Let's Plan Your Koh Rong Adventure
         </h1>
 
+        <!-- DESCRIPTION -->
+
         <p
-          class="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted sm:text-base"
+          class="mx-auto mt-3 max-w-2xl text-sm leading-6 text-black sm:text-base"
         >
           Get in touch with Explore Koh Rong using the platform that is most
           convenient for you.
         </p>
       </div>
 
-      <!-- ====================================================== -->
-      <!-- CONTACT CARDS -->
-      <!-- ====================================================== -->
+      <!-- ======================================================
+           CONTACT CARDS
+      ======================================================= -->
 
       <div
         class="mx-auto mt-9 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3"
@@ -112,7 +126,7 @@
 
           <!-- DESCRIPTION -->
 
-          <p class="mt-1 text-sm leading-5 text-muted">
+          <p class="mt-1 text-sm leading-5 text-black">
             {{ contact.text }}
           </p>
 
@@ -141,32 +155,38 @@
       </div>
     </section>
 
-    <!-- ====================================================== -->
-    <!-- HELP SECTION -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         HELP SECTION
+    ======================================================= -->
 
     <section class="page py-6 sm:py-8">
       <div
         class="mx-auto flex max-w-5xl flex-col gap-4 rounded-2xl bg-primary-50 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"
       >
         <div class="flex items-start gap-3">
+          <!-- ICON -->
+
           <div
             class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-100 text-primary-600"
           >
             <Icon icon="ri:customer-service-2-fill" class="h-5 w-5" />
           </div>
 
+          <!-- CONTENT -->
+
           <div>
             <h3 class="font-semibold text-heading">
               Need help with a booking?
             </h3>
 
-            <p class="mt-1 text-sm leading-6 text-muted">
+            <p class="mt-1 text-sm leading-6 text-black">
               WhatsApp is the fastest way to contact us about an existing
               booking.
             </p>
           </div>
         </div>
+
+        <!-- WHATSAPP -->
 
         <a
           :href="whatsAppUrl"
@@ -225,61 +245,97 @@ const whatsAppUrl = computed(() => {
 const contacts = computed(() => [
   {
     name: "Email",
+
     text: "Send us an email for questions and booking support.",
+
     value: businessEmail || "Email us",
+
     icon: "ri:mail-fill",
+
     href: businessEmail ? `mailto:${businessEmail}` : "#",
+
     action: "Send Email",
+
     external: false,
   },
 
   {
     name: "Phone",
+
     text: "Call us directly if you need quick assistance.",
+
     value: "(+855) 885 792 065",
+
     icon: "ri:phone-fill",
+
     href: "tel:+855885792065",
+
     action: "Call Now",
+
     external: false,
   },
 
   {
     name: "Telegram",
+
     text: "Chat with us through Telegram.",
+
     value: "",
+
     icon: "ri:telegram-2-fill",
+
     href: telegramUrl,
+
     action: "Open Telegram",
+
     external: true,
   },
 
   {
     name: "WhatsApp",
+
     text: "Message us directly about your booking.",
+
     value: "(+855) 885 792 065",
+
     icon: "ri:whatsapp-fill",
+
     href: whatsAppUrl.value,
+
     action: "Open WhatsApp",
+
     external: true,
   },
 
   {
     name: "Instagram",
+
     text: "Follow our latest Koh Rong experiences.",
+
     value: "",
+
     icon: "ri:instagram-fill",
+
     href: instagramUrl,
+
     action: "View Instagram",
+
     external: true,
   },
 
   {
     name: "Facebook",
+
     text: "Follow updates and contact us on Facebook.",
+
     value: "",
+
     icon: "ri:facebook-circle-fill",
+
     href: facebookUrl,
+
     action: "View Facebook",
+
     external: true,
   },
 ]);

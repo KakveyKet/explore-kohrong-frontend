@@ -35,9 +35,6 @@ const pageSize = 6;
 |--------------------------------------------------------------------------
 | COVER IMAGE
 |--------------------------------------------------------------------------
-|
-| Change this URL to your own Koh Rong cover image later.
-|
 */
 
 const coverImage =
@@ -209,11 +206,7 @@ const totalResults = computed(() => {
 });
 
 const totalPages = computed(() => {
-  return Math.max(
-    1,
-
-    Math.ceil(totalResults.value / pageSize),
-  );
+  return Math.max(1, Math.ceil(totalResults.value / pageSize));
 });
 
 const paginatedServices = computed(() => {
@@ -297,8 +290,6 @@ function goToPage(page) {
 | SERVICE DETAILS
 |--------------------------------------------------------------------------
 |
-| New process:
-|
 | Services -> Service Details -> Booking
 |
 */
@@ -358,11 +349,13 @@ onMounted(loadServices);
           <!-- TITLE -->
 
           <div>
-            <h1 class="text-2xl font-bold text-heading sm:text-3xl">
+            <h1
+              class="text-3xl font-bold leading-tight tracking-tight text-heading sm:text-4xl"
+            >
               Our Services
             </h1>
 
-            <p class="mt-1 text-xs text-slate-700 sm:text-sm">
+            <p class="mt-2 text-sm leading-6 text-black sm:text-base">
               Discover amazing experiences and explore the best of Koh Rong.
             </p>
           </div>
@@ -395,7 +388,7 @@ onMounted(loadServices);
                 </p>
 
                 <p
-                  class="mt-0.5 text-[9px] leading-tight text-slate-600 sm:text-[10px]"
+                  class="mt-0.5 text-[9px] leading-tight text-black sm:text-[10px]"
                 >
                   {{ feature.description }}
                 </p>
@@ -419,7 +412,7 @@ onMounted(loadServices);
         <div
           class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
         >
-          <h2 class="text-lg font-bold text-heading">
+          <h2 class="text-xl font-bold text-heading sm:text-2xl">
             Show all
             {{ totalResults }}
             results
@@ -435,7 +428,7 @@ onMounted(loadServices);
 
             <button
               type="button"
-              class="flex h-7 w-7 items-center justify-center rounded-md text-xs text-muted transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"
+              class="flex h-7 w-7 items-center justify-center rounded-md text-xs text-black transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"
               :disabled="currentPage === 1"
               @click="goToPage(currentPage - 1)"
             >
@@ -452,7 +445,7 @@ onMounted(loadServices);
               :class="
                 currentPage === page
                   ? 'bg-primary-500 text-white'
-                  : 'bg-slate-50 text-muted hover:bg-slate-100'
+                  : 'bg-slate-50 text-black hover:bg-slate-100'
               "
               @click="goToPage(page)"
             >
@@ -463,7 +456,7 @@ onMounted(loadServices);
 
             <button
               type="button"
-              class="flex h-7 w-7 items-center justify-center rounded-md text-xs text-muted transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"
+              class="flex h-7 w-7 items-center justify-center rounded-md text-xs text-black transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"
               :disabled="currentPage === totalPages"
               @click="goToPage(currentPage + 1)"
             >
@@ -570,7 +563,7 @@ onMounted(loadServices);
                  CARD BODY
             =============================================== -->
 
-            <div class="flex min-h-[145px] flex-col p-4">
+            <div class="flex min-h-[155px] flex-col p-4">
               <!-- CATEGORY -->
 
               <p
@@ -587,7 +580,7 @@ onMounted(loadServices);
                 @click="viewService(item)"
               >
                 <h3
-                  class="line-clamp-2 text-sm font-semibold leading-5 text-heading transition group-hover:text-primary-600"
+                  class="line-clamp-2 text-base font-semibold leading-6 text-heading transition group-hover:text-primary-600"
                 >
                   {{ item.name }}
                 </h3>
@@ -597,7 +590,7 @@ onMounted(loadServices);
 
               <p
                 v-if="cleanDescription(item.description)"
-                class="mt-2 line-clamp-2 text-[11px] leading-4 text-muted"
+                class="mt-2 line-clamp-2 text-xs leading-5 text-black"
               >
                 {{ cleanDescription(item.description) }}
               </p>
@@ -634,7 +627,7 @@ onMounted(loadServices);
 
           <h3 class="mt-3 font-semibold text-heading">No services available</h3>
 
-          <p class="mt-1 text-sm text-muted">Please check again later.</p>
+          <p class="mt-1 text-sm text-black">Please check again later.</p>
         </div>
 
         <!-- ==================================================
@@ -643,14 +636,18 @@ onMounted(loadServices);
 
         <div v-if="!loading && totalPages > 1" class="mt-8 flex justify-center">
           <div class="flex items-center gap-1">
+            <!-- PREVIOUS -->
+
             <button
               type="button"
-              class="flex h-8 w-8 items-center justify-center rounded-md text-sm text-muted transition hover:bg-slate-100 disabled:opacity-30"
+              class="flex h-8 w-8 items-center justify-center rounded-md text-sm text-black transition hover:bg-slate-100 disabled:opacity-30"
               :disabled="currentPage === 1"
               @click="goToPage(currentPage - 1)"
             >
               <Icon icon="ri:arrow-left-s-line" />
             </button>
+
+            <!-- PAGES -->
 
             <button
               v-for="page in visiblePages"
@@ -660,16 +657,18 @@ onMounted(loadServices);
               :class="
                 currentPage === page
                   ? 'bg-primary-500 text-white'
-                  : 'bg-slate-50 text-muted hover:bg-slate-100'
+                  : 'bg-slate-50 text-black hover:bg-slate-100'
               "
               @click="goToPage(page)"
             >
               {{ page }}
             </button>
 
+            <!-- NEXT -->
+
             <button
               type="button"
-              class="flex h-8 w-8 items-center justify-center rounded-md text-sm text-muted transition hover:bg-slate-100 disabled:opacity-30"
+              class="flex h-8 w-8 items-center justify-center rounded-md text-sm text-black transition hover:bg-slate-100 disabled:opacity-30"
               :disabled="currentPage === totalPages"
               @click="goToPage(currentPage + 1)"
             >

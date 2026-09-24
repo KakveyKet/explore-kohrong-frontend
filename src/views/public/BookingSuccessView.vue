@@ -443,7 +443,8 @@ function formatDate(dateValue) {
   }
 
   /*
-   * Prevent YYYY-MM-DD timezone shift.
+   * Prevent YYYY-MM-DD
+   * timezone shift.
    */
 
   if (/^\d{4}-\d{2}-\d{2}$/.test(String(dateValue))) {
@@ -596,7 +597,7 @@ onMounted(loadBooking);
 
     <section class="border-b border-border bg-white">
       <div class="page py-4">
-        <div class="flex flex-wrap items-center gap-2 text-sm text-muted">
+        <div class="flex flex-wrap items-center gap-2 text-sm text-black">
           <RouterLink to="/" class="transition hover:text-primary-600">
             Home
           </RouterLink>
@@ -649,7 +650,7 @@ onMounted(loadBooking);
           Unable to load booking
         </h1>
 
-        <p class="mt-2 text-sm leading-6 text-muted">
+        <p class="mt-2 text-sm leading-6 text-black">
           {{ error }}
         </p>
 
@@ -682,6 +683,8 @@ onMounted(loadBooking);
             class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
           >
             <div class="flex items-start gap-4">
+              <!-- STATUS ICON -->
+
               <div
                 class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full"
                 :class="statusIconClass"
@@ -689,16 +692,22 @@ onMounted(loadBooking);
                 <Icon :icon="statusIcon" class="text-2xl" />
               </div>
 
+              <!-- STATUS TEXT -->
+
               <div>
                 <h1 class="text-xl font-bold text-heading sm:text-2xl">
                   {{ statusTitle }}
                 </h1>
 
-                <p class="mt-1 max-w-2xl text-sm leading-6 text-muted">
+                <p
+                  class="mt-1 max-w-2xl text-sm leading-6 text-black sm:text-base"
+                >
                   {{ statusDescription }}
                 </p>
               </div>
             </div>
+
+            <!-- STATUS BADGE -->
 
             <span
               class="inline-flex w-fit shrink-0 items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold"
@@ -718,11 +727,15 @@ onMounted(loadBooking);
         <div
           class="overflow-hidden rounded-2xl border border-border bg-white shadow-sm"
         >
-          <!-- SERVICE -->
+          <!-- =================================================
+               SERVICE
+          ================================================== -->
 
           <div
             class="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:p-6"
           >
+            <!-- IMAGE -->
+
             <div
               class="h-28 w-full shrink-0 overflow-hidden rounded-xl bg-slate-100 sm:h-24 sm:w-32"
             >
@@ -738,6 +751,8 @@ onMounted(loadBooking);
               </div>
             </div>
 
+            <!-- SERVICE INFORMATION -->
+
             <div class="min-w-0 flex-1">
               <p
                 class="text-xs font-semibold uppercase tracking-[0.15em] text-primary-600"
@@ -751,14 +766,16 @@ onMounted(loadBooking);
 
               <p
                 v-if="primaryService?.cate_id?.name"
-                class="mt-1 text-sm text-muted"
+                class="mt-1 text-sm text-black"
               >
                 {{ primaryService.cate_id.name }}
               </p>
             </div>
 
+            <!-- TOTAL -->
+
             <div class="sm:text-right">
-              <p class="text-xs text-muted">Total</p>
+              <p class="text-xs text-black">Total</p>
 
               <p class="mt-1 text-2xl font-bold text-primary-600">
                 {{ formatPrice(booking.total_price) }}
@@ -766,12 +783,14 @@ onMounted(loadBooking);
             </div>
           </div>
 
-          <!-- REFERENCE -->
+          <!-- =================================================
+               REFERENCE
+          ================================================== -->
 
           <div class="border-t border-border bg-surface-soft px-5 py-3 sm:px-6">
             <div class="flex items-center justify-between gap-3">
               <div class="min-w-0">
-                <p class="text-xs text-muted">Booking Reference</p>
+                <p class="text-xs text-black">Booking Reference</p>
 
                 <p
                   class="mt-0.5 truncate font-mono text-sm font-medium text-heading"
@@ -779,6 +798,8 @@ onMounted(loadBooking);
                   {{ bookingReference }}
                 </p>
               </div>
+
+              <!-- COPY -->
 
               <button
                 type="button"
@@ -800,7 +821,9 @@ onMounted(loadBooking);
             <h3 class="font-semibold text-heading">Booking Information</h3>
 
             <div class="mt-5 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-              <!-- DATE -->
+              <!-- =============================================
+                   DATE
+              ============================================== -->
 
               <div class="flex items-start gap-3">
                 <div
@@ -810,7 +833,7 @@ onMounted(loadBooking);
                 </div>
 
                 <div>
-                  <p class="text-xs text-muted">Date</p>
+                  <p class="text-xs text-black">Date</p>
 
                   <p class="mt-1 text-sm font-semibold text-heading">
                     {{
@@ -820,7 +843,9 @@ onMounted(loadBooking);
                 </div>
               </div>
 
-              <!-- TIME -->
+              <!-- =============================================
+                   TIME
+              ============================================== -->
 
               <div class="flex items-start gap-3">
                 <div
@@ -830,7 +855,7 @@ onMounted(loadBooking);
                 </div>
 
                 <div>
-                  <p class="text-xs text-muted">Time</p>
+                  <p class="text-xs text-black">Time</p>
 
                   <p class="mt-1 text-sm font-semibold text-heading">
                     {{
@@ -840,7 +865,9 @@ onMounted(loadBooking);
                 </div>
               </div>
 
-              <!-- GUEST -->
+              <!-- =============================================
+                   GUESTS
+              ============================================== -->
 
               <div class="flex items-start gap-3">
                 <div
@@ -850,7 +877,7 @@ onMounted(loadBooking);
                 </div>
 
                 <div>
-                  <p class="text-xs text-muted">Guests</p>
+                  <p class="text-xs text-black">Guests</p>
 
                   <p class="mt-1 text-sm font-semibold text-heading">
                     {{ guestLabel }}
@@ -858,7 +885,9 @@ onMounted(loadBooking);
                 </div>
               </div>
 
-              <!-- PAYMENT -->
+              <!-- =============================================
+                   PAYMENT
+              ============================================== -->
 
               <div class="flex items-start gap-3">
                 <div
@@ -868,7 +897,7 @@ onMounted(loadBooking);
                 </div>
 
                 <div>
-                  <p class="text-xs text-muted">Payment</p>
+                  <p class="text-xs text-black">Payment</p>
 
                   <p class="mt-1 text-sm font-semibold text-heading">
                     {{ paymentLabel }}
@@ -876,7 +905,9 @@ onMounted(loadBooking);
                 </div>
               </div>
 
-              <!-- CHANNEL -->
+              <!-- =============================================
+                   CHANNEL
+              ============================================== -->
 
               <div class="flex items-start gap-3">
                 <div
@@ -886,7 +917,7 @@ onMounted(loadBooking);
                 </div>
 
                 <div>
-                  <p class="text-xs text-muted">Booking Via</p>
+                  <p class="text-xs text-black">Booking Via</p>
 
                   <p class="mt-1 text-sm font-semibold text-heading">
                     {{ channelLabel }}
@@ -935,7 +966,7 @@ onMounted(loadBooking);
             <h3 class="font-semibold text-heading">Special Request</h3>
           </div>
 
-          <p class="mt-3 whitespace-pre-line text-sm leading-6 text-body">
+          <p class="mt-3 whitespace-pre-line text-sm leading-6 text-black">
             {{ bookingNote }}
           </p>
         </div>
@@ -948,31 +979,41 @@ onMounted(loadBooking);
           v-if="hasCustomerInformation"
           class="rounded-2xl border border-border bg-white p-5 shadow-sm sm:p-6"
         >
+          <!-- HEADER -->
+
           <div class="flex items-center gap-3">
             <Icon icon="ri:user-3-line" class="text-xl text-primary-600" />
 
             <h3 class="font-semibold text-heading">Customer Information</h3>
           </div>
 
+          <!-- INFORMATION -->
+
           <div class="mt-5 grid gap-4 sm:grid-cols-3">
+            <!-- NAME -->
+
             <div v-if="customerName">
-              <p class="text-xs text-muted">Name</p>
+              <p class="text-xs text-black">Name</p>
 
               <p class="mt-1 text-sm font-semibold text-heading">
                 {{ customerName }}
               </p>
             </div>
 
+            <!-- PHONE -->
+
             <div v-if="customerPhone">
-              <p class="text-xs text-muted">Phone</p>
+              <p class="text-xs text-black">Phone</p>
 
               <p class="mt-1 text-sm font-semibold text-heading">
                 {{ customerPhone }}
               </p>
             </div>
 
+            <!-- EMAIL -->
+
             <div v-if="customerEmail">
-              <p class="text-xs text-muted">Email</p>
+              <p class="text-xs text-black">Email</p>
 
               <p class="mt-1 break-all text-sm font-semibold text-heading">
                 {{ customerEmail }}
@@ -986,15 +1027,19 @@ onMounted(loadBooking);
         =================================================== -->
 
         <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
+          <!-- BOOK ANOTHER -->
+
           <button
             type="button"
-            class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-white px-5 text-sm font-semibold text-heading transition hover:border-primary-300 hover:bg-primary-50"
+            class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-white px-5 text-sm font-semibold text-heading transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
             @click="router.push('/services')"
           >
             <Icon icon="ri:add-circle-line" />
 
             Book Another Service
           </button>
+
+          <!-- MY BOOKINGS -->
 
           <button
             type="button"

@@ -1,8 +1,8 @@
 <template>
   <main class="bg-white">
-    <!-- ====================================================== -->
-    <!-- HERO COVER -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         HERO COVER
+    ======================================================= -->
 
     <section class="relative overflow-hidden bg-primary-900">
       <!-- IMAGE -->
@@ -50,7 +50,7 @@
           <!-- SUBTITLE -->
 
           <p
-            class="mt-4 max-w-2xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8"
+            class="mt-4 max-w-2xl text-base leading-7 text-white sm:text-lg sm:leading-8"
           >
             {{ about.subtitle }}
           </p>
@@ -58,17 +58,17 @@
       </div>
     </section>
 
-    <!-- ====================================================== -->
-    <!-- ABOUT CONTENT -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         ABOUT CONTENT
+    ======================================================= -->
 
     <section class="py-12 sm:py-16 lg:py-20">
       <div
         class="page grid items-start gap-10 lg:grid-cols-[420px_1fr] lg:gap-14"
       >
-        <!-- ================================================== -->
-        <!-- LEFT IMAGE -->
-        <!-- ================================================== -->
+        <!-- ==================================================
+             LEFT IMAGE
+        =================================================== -->
 
         <div class="lg:sticky lg:top-28">
           <!-- IMAGE -->
@@ -81,9 +81,9 @@
             />
           </div>
 
-          <!-- ================================================== -->
-          <!-- STATS -->
-          <!-- ================================================== -->
+          <!-- ==================================================
+               STATS
+          =================================================== -->
 
           <div class="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
             <div
@@ -91,20 +91,24 @@
               :key="stat.label"
               class="rounded-2xl border border-border bg-white px-3 py-4 text-center shadow-sm sm:p-4"
             >
+              <!-- VALUE -->
+
               <p class="text-xl font-bold text-primary-600 sm:text-2xl">
                 {{ stat.value }}
               </p>
 
-              <p class="mt-1 text-xs leading-5 text-muted">
+              <!-- LABEL -->
+
+              <p class="mt-1 text-xs leading-5 text-black">
                 {{ stat.label }}
               </p>
             </div>
           </div>
         </div>
 
-        <!-- ================================================== -->
-        <!-- RIGHT CONTENT -->
-        <!-- ================================================== -->
+        <!-- ==================================================
+             RIGHT CONTENT
+        =================================================== -->
 
         <article>
           <!-- EYEBROW -->
@@ -123,23 +127,23 @@
             {{ about.subtitle }}
           </h2>
 
-          <!-- ================================================== -->
-          <!-- FULL TEXT -->
-          <!-- ================================================== -->
+          <!-- ==================================================
+               FULL TEXT
+          =================================================== -->
 
           <div class="mt-6 space-y-5">
             <p
               v-for="(paragraph, index) in paragraphs"
               :key="index"
-              class="text-sm leading-7 text-muted sm:text-base sm:leading-8"
+              class="text-sm leading-7 text-black sm:text-base sm:leading-8"
             >
               {{ paragraph }}
             </p>
           </div>
 
-          <!-- ================================================== -->
-          <!-- FEATURES -->
-          <!-- ================================================== -->
+          <!-- ==================================================
+               FEATURES
+          =================================================== -->
 
           <div class="mt-9 grid gap-4 sm:grid-cols-2">
             <div
@@ -162,16 +166,16 @@
                   {{ item.title }}
                 </h3>
 
-                <p class="mt-1 text-sm leading-6 text-muted">
+                <p class="mt-1 text-sm leading-6 text-black">
                   {{ item.description }}
                 </p>
               </div>
             </div>
           </div>
 
-          <!-- ================================================== -->
-          <!-- CTA -->
-          <!-- ================================================== -->
+          <!-- ==================================================
+               CTA
+          =================================================== -->
 
           <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <!-- SERVICES -->
@@ -203,30 +207,38 @@
       </div>
     </section>
 
-    <!-- ====================================================== -->
-    <!-- BOTTOM CTA -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         BOTTOM CTA
+    ======================================================= -->
 
     <section class="border-t border-border bg-surface-soft">
       <div
         class="page flex flex-col gap-5 py-8 sm:flex-row sm:items-center sm:justify-between sm:py-10"
       >
         <div class="max-w-2xl">
+          <!-- EYEBROW -->
+
           <p
             class="text-xs font-semibold uppercase tracking-[0.18em] text-primary-600"
           >
             Ready To Explore?
           </p>
 
+          <!-- TITLE -->
+
           <h2 class="mt-2 text-2xl font-bold text-heading sm:text-3xl">
             Start Your Koh Rong Adventure
           </h2>
 
-          <p class="mt-2 text-sm leading-6 text-muted sm:text-base">
+          <!-- DESCRIPTION -->
+
+          <p class="mt-2 text-sm leading-6 text-black sm:text-base">
             Discover island activities, transport, tours and local experiences
             all in one place.
           </p>
         </div>
+
+        <!-- BUTTON -->
 
         <RouterLink
           to="/services"

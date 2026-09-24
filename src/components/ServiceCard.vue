@@ -1,10 +1,10 @@
 <template>
   <article
-    class="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:shadow-soft"
+    class="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-soft"
   >
-    <!-- ====================================================== -->
-    <!-- IMAGE -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         IMAGE
+    ======================================================= -->
 
     <div class="relative h-56 overflow-hidden sm:h-60 lg:h-64">
       <img
@@ -20,24 +20,26 @@
         class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"
       />
 
-      <!-- CATEGORY -->
+      <!-- ======================================================
+           CATEGORY
+      ======================================================= -->
 
       <span
         v-if="categoryName"
-        class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-heading shadow-sm backdrop-blur"
+        class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-black shadow-sm backdrop-blur"
       >
         {{ categoryName }}
       </span>
     </div>
 
-    <!-- ====================================================== -->
-    <!-- CONTENT -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         CONTENT
+    ======================================================= -->
 
     <div class="relative flex flex-1 flex-col px-5 pb-5 pt-7">
-      <!-- ==================================================== -->
-      <!-- PRICE -->
-      <!-- ==================================================== -->
+      <!-- ====================================================
+           PRICE
+      ===================================================== -->
 
       <span
         class="absolute -top-3 left-4 inline-flex items-center rounded-md bg-primary-500 px-3 py-1.5 text-xs font-bold text-white shadow-sm"
@@ -45,34 +47,38 @@
         {{ formattedPrice }}
       </span>
 
-      <!-- ==================================================== -->
-      <!-- TITLE -->
-      <!-- ==================================================== -->
+      <!-- ====================================================
+           TITLE
+      ===================================================== -->
 
       <h3
-        class="line-clamp-2 min-h-[56px] text-lg font-semibold leading-7 text-heading"
+        class="line-clamp-2 min-h-[60px] text-xl font-semibold leading-7 text-heading transition duration-200 group-hover:text-primary-600"
       >
         {{ service.name }}
       </h3>
 
-      <!-- ==================================================== -->
-      <!-- DESCRIPTION -->
-      <!-- ==================================================== -->
+      <!-- ====================================================
+           DESCRIPTION
+      ===================================================== -->
 
       <p
         v-if="plainDescription"
-        class="mt-2 line-clamp-2 text-sm leading-6 text-muted"
+        class="mt-2 line-clamp-2 text-sm leading-6 text-black"
       >
         {{ plainDescription }}
       </p>
+
+      <!-- EMPTY DESCRIPTION SPACE -->
+
+      <div v-else class="mt-2 min-h-[48px]" />
 
       <!-- PUSH BUTTON TO BOTTOM -->
 
       <div class="flex-1" />
 
-      <!-- ==================================================== -->
-      <!-- FOOTER -->
-      <!-- ==================================================== -->
+      <!-- ====================================================
+           FOOTER
+      ===================================================== -->
 
       <div class="mt-6 flex items-center justify-end">
         <Button
@@ -119,7 +125,7 @@ const router = useRouter();
 
 /*
 |--------------------------------------------------------------------------
-| FALLBACK
+| FALLBACK IMAGE
 |--------------------------------------------------------------------------
 */
 
@@ -169,10 +175,10 @@ const formattedPrice = computed(() => {
 | DESCRIPTION
 |--------------------------------------------------------------------------
 |
-| Your service description may contain HTML
+| Service description may contain HTML
 | from PrimeVue Editor.
 |
-| Service card should display plain text only.
+| Card only displays plain text.
 |
 */
 
@@ -187,7 +193,9 @@ const plainDescription = computed(() => {
 
   element.innerHTML = html;
 
-  return (element.textContent || element.innerText || "").trim();
+  return String(element.textContent || element.innerText || "")
+    .replace(/\s+/g, " ")
+    .trim();
 });
 
 /*
@@ -207,10 +215,18 @@ function handleImageError() {
 */
 
 function goToDetail() {
-  if (!props.service?._id) {
+  const id = String(props.service?._id || "").trim();
+
+  if (!id || !/^[a-fA-F0-9]{24}$/.test(id)) {
     return;
   }
 
-  router.push(`/services/${props.service._id}`);
+  router.push({
+    name: "service-detail",
+
+    params: {
+      id,
+    },
+  });
 }
 </script>

@@ -221,7 +221,8 @@ function bookingReference(booking) {
   const value = booking?.booking_code || booking?.code || booking?._id || "-";
 
   /*
-   * Keep Mongo ID short in the list.
+   * Keep Mongo ID short
+   * in the list.
    */
 
   if (value === booking?._id && String(value).length > 12) {
@@ -300,17 +301,25 @@ onBeforeUnmount(() => {
 
     <section class="border-b border-border bg-white">
       <div class="page py-7 sm:py-9">
+        <!-- EYEBROW -->
+
         <p
           class="text-xs font-semibold uppercase tracking-[0.18em] text-primary-600"
         >
           My Account
         </p>
 
-        <h1 class="mt-1 text-2xl font-bold text-heading sm:text-3xl">
+        <!-- TITLE -->
+
+        <h1
+          class="mt-1 text-3xl font-bold tracking-tight text-heading sm:text-4xl"
+        >
           My Bookings
         </h1>
 
-        <p class="mt-2 text-sm text-muted">
+        <!-- DESCRIPTION -->
+
+        <p class="mt-2 text-sm leading-6 text-black sm:text-base">
           Check your bookings and their current status.
         </p>
       </div>
@@ -374,7 +383,7 @@ onBeforeUnmount(() => {
         <article
           v-for="booking in bookings"
           :key="booking._id"
-          class="rounded-2xl border border-border bg-white p-5 shadow-sm transition hover:border-primary-200 hover:shadow-md sm:p-6"
+          class="rounded-2xl border border-border bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-md sm:p-6"
         >
           <!-- =================================================
                TOP
@@ -390,9 +399,10 @@ onBeforeUnmount(() => {
 
               <!-- REFERENCE -->
 
-              <p class="mt-1 text-xs text-muted">
+              <p class="mt-1 text-xs text-black">
                 Booking
-                <span class="font-mono">
+
+                <span class="font-mono font-medium text-black">
                   #{{ bookingReference(booking) }}
                 </span>
               </p>
@@ -420,7 +430,7 @@ onBeforeUnmount(() => {
           <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
             <!-- DATE -->
 
-            <div class="flex items-center gap-2 text-muted">
+            <div class="flex items-center gap-2 text-black">
               <Icon icon="ri:calendar-line" class="text-primary-600" />
 
               <span>
@@ -434,7 +444,7 @@ onBeforeUnmount(() => {
 
             <!-- TOTAL -->
 
-            <div class="flex items-center gap-2 text-muted">
+            <div class="flex items-center gap-2 text-black">
               <Icon
                 icon="ri:money-dollar-circle-line"
                 class="text-primary-600"
@@ -453,7 +463,7 @@ onBeforeUnmount(() => {
           <div class="mt-5 flex justify-end border-t border-border pt-4">
             <button
               type="button"
-              class="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-primary-600 px-4 text-sm font-semibold text-white transition hover:bg-primary-700"
+              class="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-primary-600 px-4 text-sm font-semibold text-white transition duration-200 hover:bg-primary-700"
               @click="viewDetails(booking)"
             >
               View Details
@@ -472,22 +482,32 @@ onBeforeUnmount(() => {
         v-else
         class="rounded-2xl border border-dashed border-border bg-white px-6 py-14 text-center"
       >
+        <!-- ICON -->
+
         <div
           class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 text-primary-600"
         >
           <Icon icon="ri:calendar-check-line" class="text-2xl" />
         </div>
 
-        <h2 class="mt-4 text-lg font-semibold text-heading">No bookings yet</h2>
+        <!-- TITLE -->
 
-        <p class="mx-auto mt-2 max-w-sm text-sm leading-6 text-muted">
+        <h2 class="mt-4 text-xl font-semibold text-heading">No bookings yet</h2>
+
+        <!-- DESCRIPTION -->
+
+        <p
+          class="mx-auto mt-2 max-w-sm text-sm leading-6 text-black sm:text-base"
+        >
           You haven't made any bookings yet. Explore our services and choose
           your next Koh Rong experience.
         </p>
 
+        <!-- ACTION -->
+
         <button
           type="button"
-          class="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-primary-600 px-4 text-sm font-semibold text-white transition hover:bg-primary-700"
+          class="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-primary-600 px-4 text-sm font-semibold text-white transition duration-200 hover:bg-primary-700"
           @click="router.push('/services')"
         >
           <Icon icon="ri:compass-3-line" />

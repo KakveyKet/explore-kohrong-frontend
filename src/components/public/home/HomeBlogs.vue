@@ -1,9 +1,9 @@
 <template>
   <section class="bg-white py-6 sm:py-8 lg:py-10">
     <div class="page">
-      <!-- ====================================================== -->
-      <!-- HEADER -->
-      <!-- ====================================================== -->
+      <!-- ======================================================
+           HEADER
+      ======================================================= -->
 
       <div class="flex items-center justify-between gap-4">
         <h2 class="text-xl font-bold text-heading sm:text-2xl">Recent Blogs</h2>
@@ -18,9 +18,9 @@
         </RouterLink>
       </div>
 
-      <!-- ====================================================== -->
-      <!-- LOADING -->
-      <!-- ====================================================== -->
+      <!-- ======================================================
+           LOADING
+      ======================================================= -->
 
       <div v-if="loading" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         <div
@@ -40,9 +40,9 @@
         </div>
       </div>
 
-      <!-- ====================================================== -->
-      <!-- BLOGS -->
-      <!-- ====================================================== -->
+      <!-- ======================================================
+           BLOGS
+      ======================================================= -->
 
       <div
         v-else-if="recentBlogs.length"
@@ -53,9 +53,9 @@
           :key="blog._id"
           class="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:shadow-soft"
         >
-          <!-- ================================================== -->
-          <!-- IMAGE -->
-          <!-- ================================================== -->
+          <!-- ==================================================
+               IMAGE
+          =================================================== -->
 
           <RouterLink
             :to="`/blogs/${blog._id}`"
@@ -73,9 +73,9 @@
             </div>
           </RouterLink>
 
-          <!-- ================================================== -->
-          <!-- CONTENT -->
-          <!-- ================================================== -->
+          <!-- ==================================================
+               CONTENT
+          =================================================== -->
 
           <div class="flex flex-1 flex-col p-4">
             <!-- TITLE -->
@@ -92,7 +92,7 @@
 
             <p
               v-if="firstSectionText(blog)"
-              class="mt-2 line-clamp-3 text-sm leading-5 text-body"
+              class="mt-2 line-clamp-3 text-sm leading-5 text-black"
             >
               {{ firstSectionText(blog) }}
             </p>
@@ -117,14 +117,14 @@
         </article>
       </div>
 
-      <!-- ====================================================== -->
-      <!-- EMPTY -->
-      <!-- ====================================================== -->
+      <!-- ======================================================
+           EMPTY
+      ======================================================= -->
 
-      <div v-else class="py-12 text-center text-muted">
+      <div v-else class="py-12 text-center text-black">
         <i class="pi pi-file text-3xl text-slate-300" />
 
-        <p class="mt-3 text-sm">No blog posts available yet.</p>
+        <p class="mt-3 text-sm text-black">No blog posts available yet.</p>
       </div>
     </div>
   </section>
@@ -204,7 +204,7 @@ function firstSectionText(blog) {
 
   element.innerHTML = html;
 
-  const text = (element.textContent || element.innerText || "")
+  const text = String(element.textContent || element.innerText || "")
     .replace(/\s+/g, " ")
     .trim();
 

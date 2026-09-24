@@ -6,6 +6,7 @@
 
     <section class="relative overflow-hidden border-b border-border">
       <!-- BACKGROUND IMAGE -->
+
       <div class="absolute inset-0">
         <img
           :src="heroImage"
@@ -14,26 +15,37 @@
         />
 
         <!-- WHITE FADE -->
+
         <div
           class="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/5"
         />
 
         <!-- LIGHT OVERLAY -->
+
         <div class="absolute inset-0 bg-white/5" />
       </div>
 
       <!-- CONTENT -->
+
       <div class="page relative z-10 py-7 sm:py-8 lg:py-9">
         <!-- TITLE -->
-        <div class="max-w-xl">
-          <h1 class="text-2xl font-bold text-heading sm:text-3xl">Blogs</h1>
 
-          <p class="mt-1 text-sm leading-6 text-body sm:text-base">
+        <div class="max-w-xl">
+          <h1
+            class="text-3xl font-bold leading-tight tracking-tight text-heading sm:text-4xl"
+          >
+            Blogs
+          </h1>
+
+          <p class="mt-2 text-sm leading-6 text-black sm:text-base">
             Discover amazing experiences and explore the best of Koh Rong.
           </p>
         </div>
 
-        <!-- FEATURES -->
+        <!-- ==================================================
+             FEATURES
+        =================================================== -->
+
         <div
           class="mt-8 grid gap-4 sm:grid-cols-2 lg:ml-auto lg:mt-8 lg:max-w-3xl lg:grid-cols-4"
         >
@@ -42,18 +54,22 @@
             :key="feature.title"
             class="flex items-start gap-2.5"
           >
+            <!-- ICON -->
+
             <div
               class="flex h-9 w-9 shrink-0 items-center justify-center text-primary-600"
             >
               <Icon :icon="feature.icon" class="text-2xl" />
             </div>
 
+            <!-- TEXT -->
+
             <div>
               <p class="text-sm font-semibold text-heading">
                 {{ feature.title }}
               </p>
 
-              <p class="mt-0.5 text-xs leading-5 text-muted">
+              <p class="mt-0.5 text-xs leading-5 text-black">
                 {{ feature.description }}
               </p>
             </div>
@@ -75,26 +91,37 @@
         class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
       >
         <div>
+          <!-- EYEBROW -->
+
           <p
             class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600"
           >
             Explore Koh Rong
           </p>
 
-          <h2 class="mt-1 text-2xl font-bold text-heading sm:text-3xl">
+          <!-- TITLE -->
+
+          <h2
+            class="mt-1 text-2xl font-bold text-heading sm:text-3xl lg:text-4xl"
+          >
             Recent Blogs
           </h2>
 
-          <p class="mt-2 max-w-2xl text-sm leading-6 text-muted sm:text-base">
+          <!-- DESCRIPTION -->
+
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-black sm:text-base">
             Discover travel stories, island guides, local experiences, and
             useful tips for exploring Koh Rong.
           </p>
         </div>
 
-        <!-- RESULT COUNT -->
+        <!-- ==================================================
+             RESULT COUNT
+        =================================================== -->
+
         <div
           v-if="!loading && blogs.length"
-          class="shrink-0 text-sm text-muted"
+          class="shrink-0 text-sm text-black"
         >
           Showing
 
@@ -182,7 +209,7 @@
           <article
             v-for="blog in paginatedBlogs"
             :key="blog._id"
-            class="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+            class="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-lg"
           >
             <!-- ================================================
                  IMAGE
@@ -206,6 +233,8 @@
                 <Icon icon="ri:image-line" class="text-4xl text-slate-300" />
               </div>
 
+              <!-- IMAGE OVERLAY -->
+
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent"
               />
@@ -218,7 +247,7 @@
             <div class="flex flex-1 flex-col p-5">
               <!-- META -->
 
-              <div class="flex flex-wrap items-center gap-3 text-xs text-muted">
+              <div class="flex flex-wrap items-center gap-3 text-xs text-black">
                 <span class="inline-flex items-center gap-1.5">
                   <Icon icon="ri:calendar-line" class="text-primary-600" />
 
@@ -242,7 +271,7 @@
 
               <RouterLink :to="`/blogs/${blog._id}`" class="mt-3 block">
                 <h2
-                  class="line-clamp-2 text-lg font-bold leading-7 text-heading transition group-hover:text-primary-600"
+                  class="line-clamp-2 text-xl font-bold leading-7 text-black transition group-hover:text-primary-600"
                 >
                   {{ blog.title }}
                 </h2>
@@ -252,7 +281,7 @@
 
               <p
                 v-if="firstSectionTitle(blog)"
-                class="mt-1 line-clamp-1 text-sm font-medium text-primary-600"
+                class="mt-1 line-clamp-1 text-sm font-medium text-black"
               >
                 {{ firstSectionTitle(blog) }}
               </p>
@@ -261,10 +290,12 @@
 
               <p
                 v-if="firstSectionText(blog)"
-                class="mt-2 line-clamp-3 text-sm leading-6 text-muted"
+                class="mt-2 line-clamp-3 text-sm leading-6 text-black"
               >
                 {{ firstSectionText(blog) }}
               </p>
+
+              <!-- PUSH READ MORE DOWN -->
 
               <div class="flex-1" />
 
@@ -293,9 +324,9 @@
           v-if="totalPages > 1"
           class="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-7 sm:flex-row"
         >
-          <!-- MOBILE / RESULT INFO -->
+          <!-- RESULT INFO -->
 
-          <p class="text-sm text-muted">
+          <p class="text-sm text-black">
             Page
 
             <span class="font-semibold text-heading">
@@ -319,7 +350,7 @@
 
             <button
               type="button"
-              class="inline-flex h-10 items-center justify-center gap-1 rounded-lg border border-border bg-white px-3 text-sm font-medium text-body transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-white disabled:hover:text-body"
+              class="inline-flex h-10 items-center justify-center gap-1 rounded-lg border border-border bg-white px-3 text-sm font-medium text-black transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-white disabled:hover:text-black"
               :disabled="currentPage === 1"
               @click="previousPage"
             >
@@ -344,7 +375,7 @@
 
             <span
               v-if="showLeftDots"
-              class="flex h-10 min-w-8 items-center justify-center text-sm text-muted"
+              class="flex h-10 min-w-8 items-center justify-center text-sm text-black"
             >
               ...
             </span>
@@ -366,7 +397,7 @@
 
             <span
               v-if="showRightDots"
-              class="flex h-10 min-w-8 items-center justify-center text-sm text-muted"
+              class="flex h-10 min-w-8 items-center justify-center text-sm text-black"
             >
               ...
             </span>
@@ -387,7 +418,7 @@
 
             <button
               type="button"
-              class="inline-flex h-10 items-center justify-center gap-1 rounded-lg border border-border bg-white px-3 text-sm font-medium text-body transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-white disabled:hover:text-body"
+              class="inline-flex h-10 items-center justify-center gap-1 rounded-lg border border-border bg-white px-3 text-sm font-medium text-black transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-white disabled:hover:text-black"
               :disabled="currentPage === totalPages"
               @click="nextPage"
             >
@@ -415,7 +446,7 @@
 
         <h2 class="mt-4 text-lg font-semibold text-heading">No articles yet</h2>
 
-        <p class="mt-2 text-sm text-muted">
+        <p class="mt-2 text-sm text-black">
           New travel articles will appear here.
         </p>
       </div>
@@ -555,18 +586,6 @@ const endItem = computed(() => {
 |--------------------------------------------------------------------------
 | VISIBLE PAGE NUMBERS
 |--------------------------------------------------------------------------
-|
-| Example:
-|
-| Page 1:
-| 1 2 3 ... 10
-|
-| Page 5:
-| 1 ... 4 5 6 ... 10
-|
-| Page 10:
-| 1 ... 8 9 10
-|
 */
 
 const visiblePages = computed(() => {
@@ -586,6 +605,7 @@ const visiblePages = computed(() => {
 
   if (currentPage.value <= 2) {
     start = 2;
+
     end = 4;
   }
 
@@ -656,7 +676,7 @@ function pageButtonClass(page) {
   return [
     "border-border",
     "bg-white",
-    "text-body",
+    "text-black",
     "hover:border-primary-300",
     "hover:bg-primary-50",
     "hover:text-primary-600",
@@ -678,6 +698,7 @@ async function scrollToBlogs() {
 
     window.scrollTo({
       top,
+
       behavior: "smooth",
     });
   }
@@ -756,11 +777,6 @@ async function loadBlogs() {
 
     blogs.value = Array.isArray(data) ? data : [];
 
-    /*
-     * Start from page 1
-     * every time blogs reload.
-     */
-
     currentPage.value = 1;
   } catch (err) {
     console.error("[BLOG LOAD ERROR]", err);
@@ -833,7 +849,9 @@ function formatDate(value) {
 
   return new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
+
     month: "short",
+
     year: "numeric",
   }).format(date);
 }
@@ -842,14 +860,6 @@ function formatDate(value) {
 |--------------------------------------------------------------------------
 | KEEP PAGE VALID
 |--------------------------------------------------------------------------
-|
-| Example:
-|
-| You are on page 3 and blogs are removed,
-| leaving only 2 pages.
-|
-| Automatically move to page 2.
-|
 */
 
 watch(totalPages, (value) => {

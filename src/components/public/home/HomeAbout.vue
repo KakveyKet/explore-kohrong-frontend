@@ -4,9 +4,9 @@
       <div
         class="grid items-center gap-6 md:grid-cols-[300px_minmax(0,1fr)] lg:grid-cols-[330px_minmax(0,1fr)] lg:gap-8"
       >
-        <!-- ================================================== -->
-        <!-- IMAGE -->
-        <!-- ================================================== -->
+        <!-- ==================================================
+             IMAGE
+        =================================================== -->
 
         <div class="overflow-hidden rounded-2xl bg-slate-100">
           <img
@@ -16,15 +16,15 @@
           />
         </div>
 
-        <!-- ================================================== -->
-        <!-- CONTENT -->
-        <!-- ================================================== -->
+        <!-- ==================================================
+             CONTENT
+        =================================================== -->
 
         <div class="min-w-0">
           <!-- ABOUT -->
 
           <p
-            class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600"
+            class="text-xs font-semibold uppercase tracking-[0.18em] text-primary-600 sm:text-sm"
           >
             About Us
           </p>
@@ -40,14 +40,14 @@
           <!-- DESCRIPTION -->
 
           <p
-            class="mt-3 max-w-4xl text-sm leading-6 text-muted sm:text-base sm:leading-7"
+            class="mt-3 max-w-4xl text-sm leading-6 text-black sm:text-base sm:leading-7"
           >
             {{ previewText }}
           </p>
 
-          <!-- ================================================== -->
-          <!-- BUTTON + STATS -->
-          <!-- ================================================== -->
+          <!-- ==================================================
+               BUTTON + STATS
+          =================================================== -->
 
           <div
             class="mt-5 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between"
@@ -56,7 +56,7 @@
 
             <RouterLink
               to="/about"
-              class="group inline-flex w-fit shrink-0 items-center gap-3 rounded-full border border-border bg-white px-5 py-2.5 text-sm font-semibold text-heading transition duration-200 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
+              class="group inline-flex w-fit shrink-0 items-center gap-3 rounded-full border border-border bg-white px-5 py-2.5 text-sm font-semibold text-black transition duration-200 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
             >
               Read More About Us
 
@@ -75,11 +75,15 @@
                 :key="stat.label"
                 class="min-w-0"
               >
+                <!-- VALUE -->
+
                 <p class="text-xl font-bold text-primary-500 sm:text-2xl">
                   {{ stat.value }}
                 </p>
 
-                <p class="mt-0.5 text-xs leading-5 text-body sm:text-sm">
+                <!-- LABEL -->
+
+                <p class="mt-0.5 text-xs leading-5 text-black sm:text-sm">
                   {{ stat.label }}
                 </p>
               </div>
