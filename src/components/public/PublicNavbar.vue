@@ -4,7 +4,7 @@
          TOP BAR
     ======================================================= -->
 
-    <div class="bg-primary-600 text-white">
+    <div class="bg-primary-500 text-white">
       <div class="page flex min-h-9 items-center justify-between gap-4 py-2">
         <!-- CONTACT -->
 

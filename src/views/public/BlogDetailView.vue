@@ -3,8 +3,6 @@ import { computed, onMounted, ref, watch } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
-import { useToast } from "primevue/usetoast";
-
 import { Icon } from "@iconify/vue";
 
 import api from "../../services/api.js";
@@ -18,8 +16,6 @@ import api from "../../services/api.js";
 const route = useRoute();
 
 const router = useRouter();
-
-const toast = useToast();
 
 /*
 |--------------------------------------------------------------------------
@@ -47,24 +43,6 @@ const lightboxImage = ref("");
 
 /*
 |--------------------------------------------------------------------------
-| COMMENTS
-|--------------------------------------------------------------------------
-*/
-
-const comments = ref([]);
-
-const commentsLoading = ref(false);
-
-const commentsError = ref("");
-
-const commentSubmitting = ref(false);
-
-const commentTextValue = ref("");
-
-const maxCommentLength = 1000;
-
-/*
-|--------------------------------------------------------------------------
 | BLOG ID
 |--------------------------------------------------------------------------
 */
@@ -81,72 +59,6 @@ const blogId = computed(() => {
 
 const blogListPath = computed(() => {
   return route.path.startsWith("/blogs") ? "/blogs" : "/blog";
-});
-
-/*
-|--------------------------------------------------------------------------
-| AUTH
-|--------------------------------------------------------------------------
-*/
-
-function isLoggedIn() {
-  const token = String(localStorage.getItem("token") || "").trim();
-
-  return Boolean(token);
-}
-
-/*
-|--------------------------------------------------------------------------
-| CURRENT USER
-|--------------------------------------------------------------------------
-*/
-
-const currentUser = computed(() => {
-  try {
-    const value = localStorage.getItem("user");
-
-    if (!value) {
-      return null;
-    }
-
-    return JSON.parse(value);
-  } catch {
-    return null;
-  }
-});
-
-const currentUserName = computed(() => {
-  const user = currentUser.value;
-
-  if (!user) {
-    return "Customer";
-  }
-
-  const firstName = String(user.firstName || "").trim();
-
-  const lastName = String(user.lastName || "").trim();
-
-  const fullName = `${firstName} ${lastName}`.trim();
-
-  return fullName || user.username || "Customer";
-});
-
-const currentUserInitials = computed(() => {
-  const words = currentUserName.value.split(/\s+/).filter(Boolean);
-
-  if (!words.length) {
-    return "C";
-  }
-
-  if (words.length === 1) {
-    return String(words[0][0] || "C").toUpperCase();
-  }
-
-  return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
-});
-
-const currentUserAvatar = computed(() => {
-  return String(currentUser.value?.avatar || "").trim();
 });
 
 /*
@@ -168,24 +80,6 @@ function normalizeBlogs(response) {
 
   if (Array.isArray(data?.blogs)) {
     return data.blogs;
-  }
-
-  if (Array.isArray(data?.data)) {
-    return data.data;
-  }
-
-  return [];
-}
-
-function normalizeComments(response) {
-  const data = response?.data;
-
-  if (Array.isArray(data)) {
-    return data;
-  }
-
-  if (Array.isArray(data?.comments)) {
-    return data.comments;
   }
 
   if (Array.isArray(data?.data)) {
@@ -254,27 +148,6 @@ function formatDate(value) {
     month: "long",
     day: "numeric",
     year: "numeric",
-  }).format(date);
-}
-
-function formatCommentDate(value) {
-  if (!value) {
-    return "";
-  }
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return "";
-  }
-
-  return new Intl.DateTimeFormat("en-US", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Phnom_Penh",
   }).format(date);
 }
 
@@ -374,64 +247,6 @@ const authorName = computed(() => {
 
 /*
 |--------------------------------------------------------------------------
-| COMMENTS
-|--------------------------------------------------------------------------
-*/
-
-function commentMessage(comment) {
-  return String(comment?.comment || "").trim();
-}
-
-function commentUser(comment) {
-  const user = comment?.user_id;
-
-  if (user && typeof user === "object") {
-    return user;
-  }
-
-  return {};
-}
-
-function commentAuthor(comment) {
-  const user = commentUser(comment);
-
-  const firstName = String(user.firstName || "").trim();
-
-  const lastName = String(user.lastName || "").trim();
-
-  const fullName = `${firstName} ${lastName}`.trim();
-
-  return fullName || user.username || "Customer";
-}
-
-function commentAvatar(comment) {
-  return String(commentUser(comment).avatar || "").trim();
-}
-
-function commentInitials(comment) {
-  const words = commentAuthor(comment).split(/\s+/).filter(Boolean);
-
-  if (!words.length) {
-    return "C";
-  }
-
-  if (words.length === 1) {
-    return String(words[0][0] || "C").toUpperCase();
-  }
-
-  return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
-}
-
-const commentCount = computed(() => {
-  return comments.value.length;
-});
-
-const commentCharacterCount = computed(() => {
-  return String(commentTextValue.value || "").length;
-});
-
-/*
-|--------------------------------------------------------------------------
 | YOUTUBE
 |--------------------------------------------------------------------------
 */
@@ -518,144 +333,6 @@ function openBlog(item) {
 
 /*
 |--------------------------------------------------------------------------
-| LOAD COMMENTS
-|--------------------------------------------------------------------------
-*/
-
-async function loadComments() {
-  if (!blogId.value) {
-    return;
-  }
-
-  commentsLoading.value = true;
-
-  commentsError.value = "";
-
-  try {
-    const response = await api.get(`/blogs/${blogId.value}/comments`);
-
-    comments.value = normalizeComments(response);
-  } catch (err) {
-    console.error("[BLOG COMMENTS ERROR]", err);
-
-    comments.value = [];
-
-    commentsError.value =
-      err?.response?.data?.message || "Unable to load comments.";
-  } finally {
-    commentsLoading.value = false;
-  }
-}
-
-/*
-|--------------------------------------------------------------------------
-| SUBMIT COMMENT
-|--------------------------------------------------------------------------
-*/
-
-async function submitComment() {
-  if (!isLoggedIn()) {
-    toast.add({
-      severity: "warn",
-
-      summary: "Account Required",
-
-      detail: "Please create an account or log in before commenting.",
-
-      life: 4000,
-    });
-
-    return;
-  }
-
-  const message = String(commentTextValue.value || "").trim();
-
-  if (!message) {
-    toast.add({
-      severity: "warn",
-
-      summary: "Comment Required",
-
-      detail: "Please write a comment.",
-
-      life: 3000,
-    });
-
-    return;
-  }
-
-  if (message.length > maxCommentLength) {
-    toast.add({
-      severity: "warn",
-
-      summary: "Comment Too Long",
-
-      detail: `Maximum ${maxCommentLength} characters.`,
-
-      life: 3000,
-    });
-
-    return;
-  }
-
-  if (!blogId.value || commentSubmitting.value) {
-    return;
-  }
-
-  commentSubmitting.value = true;
-
-  try {
-    const response = await api.post(`/blogs/${blogId.value}/comments`, {
-      comment: message,
-    });
-
-    commentTextValue.value = "";
-
-    const created = response?.data?.comment;
-
-    if (created?._id) {
-      comments.value = [created, ...comments.value];
-    } else {
-      await loadComments();
-    }
-
-    toast.add({
-      severity: "success",
-
-      summary: "Comment Added",
-
-      detail: "Your comment has been posted.",
-
-      life: 3000,
-    });
-  } catch (err) {
-    console.error("[SUBMIT COMMENT ERROR]", {
-      status: err?.response?.status,
-
-      data: err?.response?.data,
-
-      message: err?.message,
-    });
-
-    toast.add({
-      severity: "error",
-
-      summary: "Unable to Comment",
-
-      detail:
-        err?.response?.data?.message ||
-        err?.response?.data?.error ||
-        "Unable to submit your comment.",
-
-      life: 5000,
-    });
-  } finally {
-    commentSubmitting.value = false;
-  }
-}
-
-/*
-|--------------------------------------------------------------------------
 | LOAD RELATED BLOGS
 |--------------------------------------------------------------------------
 */
@@ -700,8 +377,6 @@ async function loadBlog() {
 
   blog.value = null;
 
-  comments.value = [];
-
   relatedBlogs.value = [];
 
   try {
@@ -715,7 +390,7 @@ async function loadBlog() {
 
     blog.value = item;
 
-    await Promise.all([loadComments(), loadRelatedBlogs()]);
+    await loadRelatedBlogs();
   } catch (err) {
     console.error("[LOAD BLOG ERROR]", err);
 
@@ -749,7 +424,6 @@ watch(
     if (newId && newId !== oldId) {
       window.scrollTo({
         top: 0,
-
         behavior: "smooth",
       });
 
@@ -767,7 +441,7 @@ watch(
 
     <section class="border-b border-border bg-white">
       <div class="page py-3">
-        <nav class="flex flex-wrap items-center gap-1.5 text-xs text-muted">
+        <nav class="flex flex-wrap items-center gap-1.5 text-xs text-black">
           <RouterLink to="/" class="transition hover:text-primary-600">
             Home
           </RouterLink>
@@ -835,13 +509,13 @@ watch(
           Unable to load article
         </h1>
 
-        <p class="mt-2 text-sm text-muted">
+        <p class="mt-2 text-sm text-black">
           {{ error }}
         </p>
 
         <button
           type="button"
-          class="mt-6 rounded-xl bg-primary-600 px-5 py-3 text-sm font-semibold text-white"
+          class="mt-6 rounded-xl bg-primary-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-600"
           @click="loadBlog"
         >
           Try Again
@@ -863,7 +537,7 @@ watch(
           <!-- LABEL -->
 
           <p
-            class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-600"
+            class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-500"
           >
             Travel Guide
           </p>
@@ -880,53 +554,58 @@ watch(
 
           <p
             v-if="excerpt"
-            class="mt-4 max-w-3xl text-base leading-7 text-muted"
+            class="mt-4 max-w-3xl text-base leading-7 text-black"
           >
             {{ plainText(excerpt) }}
           </p>
 
-          <!-- META -->
+          <!-- =================================================
+               META
+          ================================================== -->
 
           <div
-            class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted sm:text-sm"
+            class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-black sm:text-sm"
           >
+            <!-- AUTHOR -->
+
             <div class="flex items-center gap-1.5">
-              <Icon icon="ri:user-3-line" class="text-primary-600" />
+              <Icon icon="ri:user-3-line" class="text-primary-500" />
 
               {{ authorName }}
             </div>
+
+            <!-- DIVIDER -->
 
             <span
               v-if="publishedDate"
               class="hidden h-1 w-1 rounded-full bg-slate-300 sm:block"
             />
 
+            <!-- DATE -->
+
             <div v-if="publishedDate" class="flex items-center gap-1.5">
-              <Icon icon="ri:calendar-line" class="text-primary-600" />
+              <Icon icon="ri:calendar-line" class="text-primary-500" />
 
               {{ publishedDate }}
             </div>
 
+            <!-- DIVIDER -->
+
             <span class="hidden h-1 w-1 rounded-full bg-slate-300 sm:block" />
 
+            <!-- READING TIME -->
+
             <div class="flex items-center gap-1.5">
-              <Icon icon="ri:time-line" class="text-primary-600" />
+              <Icon icon="ri:time-line" class="text-primary-500" />
 
               {{ readingTime }}
               min read
             </div>
-
-            <span class="hidden h-1 w-1 rounded-full bg-slate-300 sm:block" />
-
-            <div class="flex items-center gap-1.5">
-              <Icon icon="ri:chat-3-line" class="text-primary-600" />
-
-              {{ commentCount }}
-              {{ commentCount === 1 ? "comment" : "comments" }}
-            </div>
           </div>
 
-          <!-- FEATURED IMAGE -->
+          <!-- =================================================
+               FEATURED IMAGE
+          ================================================== -->
 
           <button
             v-if="featuredImage"
@@ -949,18 +628,22 @@ watch(
 
       <section class="page pt-8">
         <article class="mx-auto max-w-4xl">
-          <!-- INTRO -->
+          <!-- =================================================
+               INTRO
+          ================================================== -->
 
           <div
             v-if="excerpt"
-            class="mb-8 border-l-4 border-primary-500 bg-primary-50 px-5 py-4"
+            class="mb-8 border-l-4 border-primary-500 bg-primary-500/10 px-5 py-4"
           >
-            <p class="text-sm leading-7 text-body sm:text-[15px]">
+            <p class="text-sm leading-7 text-black sm:text-[15px]">
               {{ plainText(excerpt) }}
             </p>
           </div>
 
-          <!-- DETAILS -->
+          <!-- =================================================
+               DETAILS
+          ================================================== -->
 
           <div v-if="postDetails.length" class="space-y-10">
             <section
@@ -985,7 +668,9 @@ watch(
                 v-html="normalizeEditorHtml(section.text)"
               />
 
-              <!-- IMAGES -->
+              <!-- =================================================
+                   IMAGES
+              ================================================== -->
 
               <div
                 v-if="Array.isArray(section.images) && section.images.length"
@@ -1006,7 +691,7 @@ watch(
                   />
                 </button>
 
-                <!-- MULTIPLE -->
+                <!-- MULTIPLE IMAGES -->
 
                 <div v-else class="grid gap-3 sm:grid-cols-2">
                   <button
@@ -1027,9 +712,13 @@ watch(
                 </div>
               </div>
 
-              <!-- VIDEO -->
+              <!-- =================================================
+                   VIDEO
+              ================================================== -->
 
               <div v-if="section.video_url" class="mt-6">
+                <!-- YOUTUBE -->
+
                 <div
                   v-if="getYouTubeEmbedUrl(section.video_url)"
                   class="aspect-video overflow-hidden rounded-xl bg-slate-950"
@@ -1050,15 +739,17 @@ watch(
                   />
                 </div>
 
+                <!-- OTHER VIDEO -->
+
                 <a
                   v-else
                   :href="section.video_url"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="flex items-center gap-3 rounded-xl border border-border p-4 transition hover:border-primary-300"
+                  class="flex items-center gap-3 rounded-xl border border-border p-4 transition hover:border-primary-500/50"
                 >
                   <div
-                    class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-white"
+                    class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-500 text-white transition hover:bg-primary-600"
                   >
                     <Icon icon="ri:play-fill" />
                   </div>
@@ -1068,14 +759,16 @@ watch(
                       Watch Video
                     </p>
 
-                    <p class="text-xs text-muted">Open video</p>
+                    <p class="text-xs text-black">Open video</p>
                   </div>
                 </a>
               </div>
             </section>
           </div>
 
-          <!-- EMPTY CONTENT -->
+          <!-- =================================================
+               EMPTY CONTENT
+          ================================================== -->
 
           <div v-else class="py-10 text-center">
             <Icon
@@ -1083,244 +776,11 @@ watch(
               class="mx-auto text-4xl text-slate-300"
             />
 
-            <p class="mt-3 text-sm text-muted">
+            <p class="mt-3 text-sm text-black">
               Article content is not available yet.
             </p>
           </div>
         </article>
-      </section>
-
-      <!-- ======================================================
-           COMMENTS
-      ======================================================= -->
-
-      <section class="page pt-12">
-        <div class="mx-auto max-w-4xl border-t border-border pt-8">
-          <!-- HEADER -->
-
-          <div>
-            <div class="flex items-center gap-2">
-              <h2 class="text-xl font-bold text-heading sm:text-2xl">
-                Comments
-              </h2>
-
-              <span
-                class="rounded-full bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-600"
-              >
-                {{ commentCount }}
-              </span>
-            </div>
-
-            <p class="mt-1 text-sm text-muted">
-              Share your thoughts about this article.
-            </p>
-          </div>
-
-          <!-- =================================================
-               LOGGED IN
-          ================================================== -->
-
-          <div v-if="isLoggedIn()" class="mt-6">
-            <div class="flex items-start gap-3">
-              <!-- AVATAR -->
-
-              <div
-                class="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-primary-100"
-              >
-                <img
-                  v-if="currentUserAvatar"
-                  :src="currentUserAvatar"
-                  :alt="currentUserName"
-                  class="h-full w-full object-cover"
-                />
-
-                <div
-                  v-else
-                  class="flex h-full w-full items-center justify-center text-sm font-bold text-primary-700"
-                >
-                  {{ currentUserInitials }}
-                </div>
-              </div>
-
-              <!-- FORM -->
-
-              <div class="min-w-0 flex-1">
-                <p class="mb-2 text-sm font-semibold text-heading">
-                  {{ currentUserName }}
-                </p>
-
-                <textarea
-                  v-model="commentTextValue"
-                  :maxlength="maxCommentLength"
-                  rows="4"
-                  class="w-full resize-none rounded-xl border border-border bg-white px-4 py-3 text-sm text-body outline-none transition placeholder:text-slate-400 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
-                  placeholder="Write a comment..."
-                />
-
-                <div class="mt-2 flex items-center justify-between gap-3">
-                  <p
-                    class="text-xs"
-                    :class="
-                      commentCharacterCount >= maxCommentLength
-                        ? 'text-red-500'
-                        : 'text-muted'
-                    "
-                  >
-                    {{ commentCharacterCount }}
-                    /
-                    {{ maxCommentLength }}
-                  </p>
-
-                  <button
-                    type="button"
-                    class="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-primary-600 px-5 text-sm font-semibold text-white transition hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
-                    :disabled="
-                      commentSubmitting || !String(commentTextValue).trim()
-                    "
-                    @click="submitComment"
-                  >
-                    <Icon
-                      v-if="commentSubmitting"
-                      icon="ri:loader-4-line"
-                      class="animate-spin"
-                    />
-
-                    <Icon v-else icon="ri:send-plane-2-line" />
-
-                    {{ commentSubmitting ? "Posting..." : "Post Comment" }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- =================================================
-               NOT LOGGED IN
-          ================================================== -->
-
-          <div v-else class="mt-6 rounded-xl bg-surface-soft p-5">
-            <div class="flex items-start gap-3">
-              <div
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-primary-600"
-              >
-                <Icon icon="ri:user-line" class="text-xl" />
-              </div>
-
-              <div>
-                <p class="text-sm font-semibold text-heading">
-                  Want to leave a comment?
-                </p>
-
-                <p class="mt-1 text-xs leading-5 text-muted">
-                  Please create an account or log in before commenting.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- ERROR -->
-
-          <div
-            v-if="commentsError"
-            class="mt-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
-          >
-            <Icon icon="ri:error-warning-line" class="mt-0.5 shrink-0" />
-
-            {{ commentsError }}
-          </div>
-
-          <!-- COMMENT LOADING -->
-
-          <div v-if="commentsLoading" class="mt-7 space-y-5">
-            <div v-for="item in 3" :key="item" class="flex gap-3">
-              <div
-                class="h-10 w-10 shrink-0 animate-pulse rounded-full bg-slate-200"
-              />
-
-              <div class="flex-1">
-                <div class="h-4 w-32 animate-pulse rounded bg-slate-200" />
-
-                <div
-                  class="mt-3 h-4 w-full animate-pulse rounded bg-slate-100"
-                />
-
-                <div
-                  class="mt-2 h-4 w-4/5 animate-pulse rounded bg-slate-100"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- COMMENTS -->
-
-          <div v-else-if="comments.length" class="mt-7 divide-y divide-border">
-            <article
-              v-for="comment in comments"
-              :key="comment._id"
-              class="flex gap-3 py-5 first:pt-0"
-            >
-              <!-- AVATAR -->
-
-              <div
-                class="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-primary-50"
-              >
-                <img
-                  v-if="commentAvatar(comment)"
-                  :src="commentAvatar(comment)"
-                  :alt="commentAuthor(comment)"
-                  class="h-full w-full object-cover"
-                />
-
-                <div
-                  v-else
-                  class="flex h-full w-full items-center justify-center text-sm font-bold text-primary-600"
-                >
-                  {{ commentInitials(comment) }}
-                </div>
-              </div>
-
-              <!-- CONTENT -->
-
-              <div class="min-w-0 flex-1">
-                <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <p class="text-sm font-semibold text-heading">
-                    {{ commentAuthor(comment) }}
-                  </p>
-
-                  <span class="text-xs text-muted">
-                    {{
-                      formatCommentDate(comment.created_at || comment.createdAt)
-                    }}
-                  </span>
-                </div>
-
-                <p
-                  class="mt-2 whitespace-pre-line break-words text-sm leading-6 text-body"
-                >
-                  {{ commentMessage(comment) }}
-                </p>
-              </div>
-            </article>
-          </div>
-
-          <!-- EMPTY -->
-
-          <div
-            v-else
-            class="mt-7 rounded-xl bg-surface-soft px-5 py-8 text-center"
-          >
-            <Icon
-              icon="ri:chat-smile-2-line"
-              class="mx-auto text-3xl text-primary-600"
-            />
-
-            <h3 class="mt-2 font-semibold text-heading">No comments yet</h3>
-
-            <p class="mt-1 text-sm text-muted">
-              Be the first to share your thoughts.
-            </p>
-          </div>
-        </div>
       </section>
 
       <!-- ======================================================
@@ -1329,24 +789,30 @@ watch(
 
       <section v-if="relatedBlogs.length" class="page pt-14">
         <div class="mx-auto max-w-6xl border-t border-border pt-8">
-          <!-- HEADER -->
+          <!-- =================================================
+               HEADER
+          ================================================== -->
 
           <div class="flex items-end justify-between gap-4">
             <div>
               <p
-                class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-600"
+                class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-500"
               >
                 Keep Exploring
               </p>
 
-              <h2 class="mt-1 text-2xl font-bold text-heading">
+              <h2 class="mt-1 text-2xl font-bold text-heading sm:text-3xl">
                 Related Articles
               </h2>
+
+              <p class="mt-2 text-sm text-black">
+                Discover more stories and guides from Koh Rong.
+              </p>
             </div>
 
             <RouterLink
               :to="blogListPath"
-              class="hidden items-center gap-1 text-sm font-semibold text-primary-600 transition hover:text-primary-700 sm:flex"
+              class="hidden items-center gap-1 text-sm font-semibold text-primary-500 transition hover:text-primary-600 sm:flex"
             >
               View All
 
@@ -1354,13 +820,15 @@ watch(
             </RouterLink>
           </div>
 
-          <!-- ARTICLES -->
+          <!-- =================================================
+               ARTICLES
+          ================================================== -->
 
           <div class="mt-6 grid gap-5 md:grid-cols-3">
             <article
               v-for="item in relatedBlogs"
               :key="item._id"
-              class="group overflow-hidden rounded-xl border border-border bg-white transition hover:-translate-y-0.5 hover:shadow-md"
+              class="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:border-primary-500/40 hover:shadow-md"
             >
               <!-- IMAGE -->
 
@@ -1391,15 +859,21 @@ watch(
                 </div>
               </button>
 
-              <!-- CONTENT -->
+              <!-- =================================================
+                   CONTENT
+              ================================================== -->
 
-              <div class="p-4">
-                <p class="text-xs text-muted">
+              <div class="flex flex-1 flex-col p-4">
+                <!-- DATE -->
+
+                <p class="text-xs text-black">
                   {{
                     formatDate(item.created_at || item.createdAt) ||
                     "Travel Guide"
                   }}
                 </p>
+
+                <!-- TITLE -->
 
                 <button
                   type="button"
@@ -1413,7 +887,9 @@ watch(
                   </h3>
                 </button>
 
-                <p class="mt-2 line-clamp-2 text-sm leading-5 text-muted">
+                <!-- DESCRIPTION -->
+
+                <p class="mt-2 line-clamp-2 text-sm leading-6 text-black">
                   {{
                     plainText(
                       item.excerpt ||
@@ -1424,9 +900,13 @@ watch(
                   }}
                 </p>
 
+                <div class="flex-1" />
+
+                <!-- READ ARTICLE -->
+
                 <button
                   type="button"
-                  class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary-600"
+                  class="mt-4 inline-flex w-fit items-center gap-1 text-sm font-semibold text-primary-500 transition hover:text-primary-600"
                   @click="openBlog(item)"
                 >
                   Read Article
@@ -1437,12 +917,14 @@ watch(
             </article>
           </div>
 
-          <!-- MOBILE -->
+          <!-- =================================================
+               MOBILE VIEW ALL
+          ================================================== -->
 
           <div class="mt-6 text-center sm:hidden">
             <RouterLink
               :to="blogListPath"
-              class="inline-flex items-center gap-2 rounded-lg border border-primary-600 px-5 py-2.5 text-sm font-semibold text-primary-600"
+              class="inline-flex items-center gap-2 rounded-lg border border-primary-500 px-5 py-2.5 text-sm font-semibold text-primary-500 transition hover:bg-primary-500/10 hover:text-primary-600"
             >
               View All Articles
 
@@ -1462,6 +944,8 @@ watch(
           class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/95 p-4"
           @click.self="closeLightbox"
         >
+          <!-- CLOSE -->
+
           <button
             type="button"
             class="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
@@ -1470,6 +954,8 @@ watch(
           >
             <Icon icon="ri:close-line" class="text-2xl" />
           </button>
+
+          <!-- IMAGE -->
 
           <img
             v-if="lightboxImage"
@@ -1491,7 +977,7 @@ watch(
 */
 
 .blog-rich-text {
-  color: #334155;
+  color: #000000;
   font-size: 1rem;
   line-height: 1.9;
   overflow-wrap: break-word;
@@ -1505,6 +991,7 @@ watch(
 
 .blog-rich-text :deep(p) {
   margin: 0 0 1.25rem;
+  color: #000000;
   line-height: 1.9;
 }
 
@@ -1582,6 +1069,7 @@ watch(
   margin-top: 1rem;
   margin-bottom: 1.5rem;
   padding-left: 1.6rem;
+  color: #000000;
 }
 
 .blog-rich-text :deep(ul) {
@@ -1595,11 +1083,12 @@ watch(
 .blog-rich-text :deep(li) {
   margin-bottom: 0.7rem;
   padding-left: 0.25rem;
+  color: #000000;
   line-height: 1.75;
 }
 
 .blog-rich-text :deep(li::marker) {
-  color: #1675e3;
+  color: #43b5e3;
 }
 
 /*
@@ -1609,14 +1098,14 @@ watch(
 */
 
 .blog-rich-text :deep(a) {
-  color: #1675e3;
+  color: #43b5e3;
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .blog-rich-text :deep(a:hover) {
-  color: #125cbd;
+  color: #319ecc;
 }
 
 /*
@@ -1627,10 +1116,10 @@ watch(
 
 .blog-rich-text :deep(blockquote) {
   margin: 1.75rem 0;
-  border-left: 4px solid #1675e3;
-  background: #eff8ff;
+  border-left: 4px solid #43b5e3;
+  background: rgba(67, 181, 227, 0.1);
   padding: 1rem 1.25rem;
-  color: #334155;
+  color: #000000;
 }
 
 /*
@@ -1705,6 +1194,10 @@ watch(
   border: 1px solid #e2e8f0;
   padding: 0.8rem 1rem;
   text-align: left;
+}
+
+.blog-rich-text :deep(td) {
+  color: #000000;
 }
 
 .blog-rich-text :deep(th) {

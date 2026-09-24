@@ -13,11 +13,14 @@
     />
 
     <!-- ======================================================
-         DARK BLUE OVERLAY
+         DARK OVERLAY
+         Keep this neutral — not primary-900/950
     ======================================================= -->
 
+    <!-- LIGHT HERO OVERLAY -->
+
     <div
-      class="absolute inset-0 -z-20 bg-gradient-to-r from-primary-950/95 via-primary-900/75 to-primary-800/20"
+      class="absolute inset-0 -z-20 bg-gradient-to-r from-slate-700/45 via-slate-600/25 to-transparent"
     />
 
     <!-- ======================================================
@@ -25,7 +28,7 @@
     ======================================================= -->
 
     <div
-      class="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent"
+      class="absolute inset-0 -z-10 bg-gradient-to-t from-black/35 via-transparent to-transparent"
     />
 
     <!-- ======================================================
@@ -41,41 +44,30 @@
         =================================================== -->
 
         <div
-          class="relative inline-flex items-center justify-center overflow-hidden rounded-full border border-cyan-200/70 bg-white/[0.08] px-6 py-2.5 text-sm font-semibold text-secondary-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(103,232,249,0.16),0_8px_24px_rgba(0,0,0,0.10)] backdrop-blur-[18px] before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/[0.14] before:via-white/[0.04] before:to-transparent before:content-[''] after:pointer-events-none after:absolute after:left-[10%] after:right-[10%] after:top-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-cyan-100/90 after:to-transparent after:content-[''] sm:px-7 sm:py-3 sm:text-base"
+          class="relative inline-flex items-center justify-center overflow-hidden rounded-full border border-primary-500/50 bg-white/[0.08] px-6 py-2.5 text-sm font-semibold text-primary-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.45),0_8px_24px_rgba(0,0,0,0.10)] backdrop-blur-[18px] before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/[0.14] before:via-white/[0.04] before:to-transparent before:content-[''] after:pointer-events-none after:absolute after:left-[10%] after:right-[10%] after:top-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-primary-500/80 after:to-transparent after:content-[''] sm:px-7 sm:py-3 sm:text-base"
         >
           <span class="relative z-10"> Discover Paradise </span>
         </div>
 
-        <!-- ==================================================
-             TITLE
-        =================================================== -->
-
         <!-- MOBILE TITLE -->
-
         <h1
           class="mt-5 text-center text-[30px] font-bold leading-[1.15] tracking-tight text-white min-[390px]:text-[34px] sm:hidden"
         >
-          <span class="block"> Explore Koh Rong </span>
+          <span class="block"> Explore Koh Rong — </span>
 
-          <span class="mt-1 block text-white"> Island Adventure Awaits </span>
+          <span class="mt-1 block"> The Best Way to Discover the Island </span>
         </h1>
 
         <!-- TABLET / DESKTOP TITLE -->
-
         <h1
           class="mt-5 hidden max-w-4xl font-bold leading-[1.08] tracking-tight text-white sm:block sm:text-5xl lg:text-6xl xl:text-7xl"
         >
-          Explore Koh Rong
+          Explore Koh Rong —
 
-          <span class="mt-1 block"> Your Island Adventure Awaits </span>
+          <span class="mt-1 block"> The Best Way to Discover the Island </span>
         </h1>
-
-        <!-- ==================================================
-             DESCRIPTION
-        =================================================== -->
-
         <p
-          class="mx-auto mt-5 max-w-3xl text-center text-sm leading-7 text-white/85 sm:mx-0 sm:text-left sm:text-base sm:leading-8 lg:text-lg"
+          class="mx-auto mt-5 max-w-3xl text-center text-sm leading-7 text-white/90 sm:mx-0 sm:text-left sm:text-base sm:leading-8 lg:text-lg"
         >
           Discover beautiful beaches, exciting boat trips, convenient transport,
           scooter rentals and unforgettable local experiences around Koh Rong.
@@ -94,13 +86,13 @@
 
           <RouterLink
             to="/services"
-            class="group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full border border-cyan-200/70 bg-white/[0.08] px-6 py-3.5 text-sm font-semibold text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(103,232,249,0.16),0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-[18px] transition duration-300 before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/[0.15] before:via-white/[0.04] before:to-transparent before:content-[''] after:pointer-events-none after:absolute after:left-[10%] after:right-[10%] after:top-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-cyan-100/90 after:to-transparent after:content-[''] hover:-translate-y-0.5 hover:border-cyan-100 hover:bg-white/[0.13] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.55),inset_0_-1px_1px_rgba(103,232,249,0.18),0_12px_30px_rgba(0,0,0,0.16)] sm:w-auto"
+            class="group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full border border-primary-500/60 bg-white/[0.08] px-6 py-3.5 text-sm font-semibold text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.45),0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-[18px] transition duration-300 before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/[0.15] before:via-white/[0.04] before:to-transparent before:content-[''] after:pointer-events-none after:absolute after:left-[10%] after:right-[10%] after:top-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-primary-500/80 after:to-transparent after:content-[''] hover:-translate-y-0.5 hover:border-primary-500 hover:bg-white/[0.13] sm:w-auto"
           >
             <span class="relative z-10"> Discover Tours </span>
 
             <Icon
               icon="ri:arrow-right-line"
-              class="relative z-10 h-4 w-4 transition duration-300 group-hover:translate-x-1"
+              class="relative z-10 h-4 w-4 text-primary-500 transition duration-300 group-hover:translate-x-1"
             />
           </RouterLink>
 
@@ -132,7 +124,7 @@
           <!-- ICON -->
 
           <div
-            class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary-700/80 text-secondary-200 sm:h-10 sm:w-10"
+            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-primary-500/30 bg-primary-500/15 text-primary-500 sm:h-10 sm:w-10"
           >
             <Icon :icon="feature.icon" class="h-[18px] w-[18px]" />
           </div>
@@ -144,7 +136,7 @@
               {{ feature.title }}
             </p>
 
-            <p class="mt-0.5 hidden text-xs leading-5 text-white/60 md:block">
+            <p class="mt-0.5 hidden text-xs leading-5 text-white/70 md:block">
               {{ feature.description }}
             </p>
           </div>

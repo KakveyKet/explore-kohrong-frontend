@@ -57,7 +57,7 @@
             <!-- ICON -->
 
             <div
-              class="flex h-9 w-9 shrink-0 items-center justify-center text-primary-600"
+              class="flex h-9 w-9 shrink-0 items-center justify-center text-primary-500"
             >
               <Icon :icon="feature.icon" class="text-2xl" />
             </div>
@@ -94,7 +94,7 @@
           <!-- EYEBROW -->
 
           <p
-            class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600"
+            class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-500"
           >
             Explore Koh Rong
           </p>
@@ -191,7 +191,7 @@
 
         <button
           type="button"
-          class="mt-4 inline-flex items-center gap-2 rounded-full bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-700"
+          class="mt-4 inline-flex items-center gap-2 rounded-full bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white transition duration-200 hover:bg-primary-600"
           @click="loadBlogs"
         >
           <Icon icon="ri:refresh-line" class="text-base" />
@@ -209,7 +209,7 @@
           <article
             v-for="blog in paginatedBlogs"
             :key="blog._id"
-            class="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-lg"
+            class="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:border-primary-500/40 hover:shadow-lg"
           >
             <!-- ================================================
                  IMAGE
@@ -249,13 +249,13 @@
 
               <div class="flex flex-wrap items-center gap-3 text-xs text-black">
                 <span class="inline-flex items-center gap-1.5">
-                  <Icon icon="ri:calendar-line" class="text-primary-600" />
+                  <Icon icon="ri:calendar-line" class="text-primary-500" />
 
                   {{ formatDate(blog.created_at) }}
                 </span>
 
                 <span class="inline-flex items-center gap-1.5">
-                  <Icon icon="ri:file-list-3-line" class="text-primary-600" />
+                  <Icon icon="ri:file-list-3-line" class="text-primary-500" />
 
                   {{ blog.post_detail?.length || 0 }}
 
@@ -271,7 +271,7 @@
 
               <RouterLink :to="`/blogs/${blog._id}`" class="mt-3 block">
                 <h2
-                  class="line-clamp-2 text-xl font-bold leading-7 text-black transition group-hover:text-primary-600"
+                  class="line-clamp-2 text-xl font-bold leading-7 text-black transition duration-200 group-hover:text-primary-600"
                 >
                   {{ blog.title }}
                 </h2>
@@ -303,13 +303,13 @@
 
               <RouterLink
                 :to="`/blogs/${blog._id}`"
-                class="group/link mt-5 inline-flex w-fit items-center gap-2 text-sm font-semibold text-primary-600 transition hover:text-primary-700"
+                class="group/link mt-5 inline-flex w-fit items-center gap-2 text-sm font-semibold text-primary-500 transition duration-200 hover:text-primary-600"
               >
                 Read More
 
                 <Icon
                   icon="ri:arrow-right-line"
-                  class="text-base transition group-hover/link:translate-x-1"
+                  class="text-base transition duration-200 group-hover/link:translate-x-1"
                 />
               </RouterLink>
             </div>
@@ -350,7 +350,7 @@
 
             <button
               type="button"
-              class="inline-flex h-10 items-center justify-center gap-1 rounded-lg border border-border bg-white px-3 text-sm font-medium text-black transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-white disabled:hover:text-black"
+              class="inline-flex h-10 items-center justify-center gap-1 rounded-lg border border-border bg-white px-3 text-sm font-medium text-black transition duration-200 hover:border-primary-500/50 hover:bg-primary-500/10 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-white disabled:hover:text-black"
               :disabled="currentPage === 1"
               @click="previousPage"
             >
@@ -364,7 +364,7 @@
             <button
               v-if="showFirstPage"
               type="button"
-              class="flex h-10 min-w-10 items-center justify-center rounded-lg border px-3 text-sm font-semibold transition"
+              class="flex h-10 min-w-10 items-center justify-center rounded-lg border px-3 text-sm font-semibold transition duration-200"
               :class="pageButtonClass(1)"
               @click="goToPage(1)"
             >
@@ -386,7 +386,7 @@
               v-for="page in visiblePages"
               :key="page"
               type="button"
-              class="flex h-10 min-w-10 items-center justify-center rounded-lg border px-3 text-sm font-semibold transition"
+              class="flex h-10 min-w-10 items-center justify-center rounded-lg border px-3 text-sm font-semibold transition duration-200"
               :class="pageButtonClass(page)"
               @click="goToPage(page)"
             >
@@ -407,7 +407,7 @@
             <button
               v-if="showLastPage"
               type="button"
-              class="flex h-10 min-w-10 items-center justify-center rounded-lg border px-3 text-sm font-semibold transition"
+              class="flex h-10 min-w-10 items-center justify-center rounded-lg border px-3 text-sm font-semibold transition duration-200"
               :class="pageButtonClass(totalPages)"
               @click="goToPage(totalPages)"
             >
@@ -418,7 +418,7 @@
 
             <button
               type="button"
-              class="inline-flex h-10 items-center justify-center gap-1 rounded-lg border border-border bg-white px-3 text-sm font-medium text-black transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-white disabled:hover:text-black"
+              class="inline-flex h-10 items-center justify-center gap-1 rounded-lg border border-border bg-white px-3 text-sm font-medium text-black transition duration-200 hover:border-primary-500/50 hover:bg-primary-500/10 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-white disabled:hover:text-black"
               :disabled="currentPage === totalPages"
               @click="nextPage"
             >
@@ -439,7 +439,7 @@
         class="mt-8 rounded-2xl bg-surface-soft px-6 py-16 text-center"
       >
         <div
-          class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 text-primary-600"
+          class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-500/10 text-primary-500"
         >
           <Icon icon="ri:article-line" class="text-2xl" />
         </div>
@@ -670,15 +670,22 @@ const showRightDots = computed(() => {
 
 function pageButtonClass(page) {
   if (currentPage.value === page) {
-    return ["border-primary-600", "bg-primary-600", "text-white", "shadow-sm"];
+    return [
+      "border-primary-500",
+      "bg-primary-500",
+      "text-white",
+      "shadow-sm",
+      "hover:border-primary-600",
+      "hover:bg-primary-600",
+    ];
   }
 
   return [
     "border-border",
     "bg-white",
     "text-black",
-    "hover:border-primary-300",
-    "hover:bg-primary-50",
+    "hover:border-primary-500/50",
+    "hover:bg-primary-500/10",
     "hover:text-primary-600",
   ];
 }

@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-primary-700 text-white">
+  <footer class="bg-primary-500 text-white">
     <div class="page">
       <!-- ====================================================== -->
       <!-- MAIN FOOTER -->

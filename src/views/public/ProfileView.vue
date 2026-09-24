@@ -48,9 +48,7 @@
         <div class="overflow-hidden rounded-2xl bg-white shadow-sm">
           <!-- TOP PROFILE -->
 
-          <div
-            class="bg-gradient-to-r from-primary-700 to-primary-500 px-5 py-6 sm:px-7 sm:py-7"
-          >
+          <div class="bg-primary-500 px-5 py-6 sm:px-7 sm:py-7">
             <div class="flex items-center gap-4">
               <!-- INITIALS -->
 

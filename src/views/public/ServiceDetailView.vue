@@ -1,12 +1,8 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
-
 import { useRoute, useRouter } from "vue-router";
-
 import { useToast } from "primevue/usetoast";
-
 import { Icon } from "@iconify/vue";
-
 import Dialog from "primevue/dialog";
 
 import api from "../../services/api.js";
@@ -18,9 +14,7 @@ import api from "../../services/api.js";
 */
 
 const route = useRoute();
-
 const router = useRouter();
-
 const toast = useToast();
 
 /*
@@ -30,13 +24,9 @@ const toast = useToast();
 */
 
 const service = ref(null);
-
 const loading = ref(true);
-
 const error = ref("");
-
 const activeImage = ref("");
-
 const imageDialog = ref(false);
 
 /*
@@ -46,7 +36,6 @@ const imageDialog = ref(false);
 */
 
 const relatedServices = ref([]);
-
 const relatedLoading = ref(false);
 
 /*
@@ -184,11 +173,8 @@ function formatPrice(value) {
 
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-
     currency: "USD",
-
     minimumFractionDigits: amount % 1 === 0 ? 0 : 2,
-
     maximumFractionDigits: 2,
   }).format(amount);
 }
@@ -201,18 +187,13 @@ function formatPrice(value) {
 
 async function loadService() {
   loading.value = true;
-
   error.value = "";
-
   service.value = null;
-
   activeImage.value = "";
 
   if (!isValidServiceId(serviceId.value)) {
     error.value = "Invalid service.";
-
     loading.value = false;
-
     return;
   }
 
@@ -319,11 +300,8 @@ function bookService() {
   if (!isLoggedIn()) {
     toast.add({
       severity: "warn",
-
       summary: "Account Required",
-
       detail: "Please create an account or log in before booking.",
-
       life: 4000,
     });
 
@@ -332,7 +310,6 @@ function bookService() {
 
   router.push({
     path: "/booking",
-
     query: {
       service_id: id,
     },
@@ -354,7 +331,6 @@ function openService(item) {
 
   router.push({
     name: "service-detail",
-
     params: {
       id,
     },
@@ -384,7 +360,6 @@ watch(
     if (normalizeServiceId(newValue) !== normalizeServiceId(oldValue)) {
       window.scrollTo({
         top: 0,
-
         behavior: "smooth",
       });
 
@@ -481,7 +456,7 @@ onMounted(loadService);
 
         <button
           type="button"
-          class="mt-6 rounded-xl bg-primary-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-700"
+          class="mt-6 rounded-xl bg-primary-500 px-5 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-primary-600"
           @click="backToServices"
         >
           Back to Services
@@ -556,7 +531,7 @@ onMounted(loadService);
                   :class="
                     activeImage === image
                       ? 'border-primary-500'
-                      : 'border-transparent hover:border-primary-300'
+                      : 'border-transparent hover:border-primary-500/40'
                   "
                   @click="activeImage = image"
                 >
@@ -577,7 +552,7 @@ onMounted(loadService);
               <!-- CATEGORY -->
 
               <p
-                class="text-xs font-semibold uppercase tracking-wide text-primary-600"
+                class="text-xs font-semibold uppercase tracking-wide text-primary-500"
               >
                 {{ categoryName }}
               </p>
@@ -604,7 +579,7 @@ onMounted(loadService);
                 <div class="flex items-center gap-3 text-sm">
                   <Icon
                     icon="ri:price-tag-3-line"
-                    class="w-5 shrink-0 text-primary-600"
+                    class="w-5 shrink-0 text-primary-500"
                   />
 
                   <span class="w-24 text-black"> Category: </span>
@@ -619,7 +594,7 @@ onMounted(loadService);
                 <div class="flex items-center gap-3 text-sm">
                   <Icon
                     icon="ri:checkbox-circle-line"
-                    class="w-5 shrink-0 text-primary-600"
+                    class="w-5 shrink-0 text-primary-500"
                   />
 
                   <span class="w-24 text-black"> Availability: </span>
@@ -639,7 +614,7 @@ onMounted(loadService);
                 <div class="flex items-center gap-3 text-sm">
                   <Icon
                     icon="ri:compass-3-line"
-                    class="w-5 shrink-0 text-primary-600"
+                    class="w-5 shrink-0 text-primary-500"
                   />
 
                   <span class="w-24 text-black"> Experience: </span>
@@ -658,7 +633,7 @@ onMounted(loadService);
                 <p class="text-sm font-medium text-black">Starting Price</p>
 
                 <div class="mt-1 flex items-end gap-2">
-                  <span class="text-3xl font-bold text-primary-600 sm:text-4xl">
+                  <span class="text-3xl font-bold text-primary-500 sm:text-4xl">
                     {{ formatPrice(service.price) }}
                   </span>
                 </div>
@@ -671,7 +646,7 @@ onMounted(loadService);
               <div class="mt-6">
                 <button
                   type="button"
-                  class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-primary-700 sm:w-auto sm:min-w-[180px]"
+                  class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-6 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-primary-600 sm:w-auto sm:min-w-[180px]"
                   @click="bookService"
                 >
                   Book Now
@@ -687,7 +662,7 @@ onMounted(loadService);
               >
                 <Icon
                   icon="ri:shield-check-line"
-                  class="mt-0.5 shrink-0 text-primary-600"
+                  class="mt-0.5 shrink-0 text-primary-500"
                 />
 
                 <span>
@@ -706,7 +681,7 @@ onMounted(loadService);
               <!-- LABEL -->
 
               <p
-                class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-600"
+                class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-500"
               >
                 Service Information
               </p>
@@ -746,7 +721,7 @@ onMounted(loadService);
             <div class="flex items-end justify-between gap-4">
               <div>
                 <p
-                  class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-600"
+                  class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-500"
                 >
                   Explore More
                 </p>
@@ -762,7 +737,7 @@ onMounted(loadService);
 
               <RouterLink
                 to="/services"
-                class="hidden items-center gap-1 text-sm font-semibold text-primary-600 transition hover:text-primary-700 sm:flex"
+                class="hidden items-center gap-1 text-sm font-semibold text-primary-500 transition hover:text-primary-600 sm:flex"
               >
                 View All
 
@@ -806,7 +781,7 @@ onMounted(loadService);
               <article
                 v-for="item in relatedServices"
                 :key="item._id"
-                class="group overflow-hidden rounded-xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-md"
+                class="group overflow-hidden rounded-xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:border-primary-500/40 hover:shadow-md"
               >
                 <!-- IMAGE -->
 
@@ -844,7 +819,7 @@ onMounted(loadService);
                   <!-- CATEGORY -->
 
                   <p
-                    class="text-[10px] font-semibold uppercase tracking-wide text-primary-600"
+                    class="text-[10px] font-semibold uppercase tracking-wide text-primary-500"
                   >
                     {{ relatedCategoryName(item) }}
                   </p>
@@ -891,7 +866,9 @@ onMounted(loadService);
               No related services are available at the moment.
             </div>
 
-            <!-- MOBILE VIEW ALL -->
+            <!-- =================================================
+                 MOBILE VIEW ALL
+            ================================================== -->
 
             <div
               v-if="relatedServices.length"
@@ -899,7 +876,7 @@ onMounted(loadService);
             >
               <RouterLink
                 to="/services"
-                class="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-5 py-2.5 text-sm font-semibold text-primary-600"
+                class="inline-flex items-center gap-2 rounded-full border border-primary-500 bg-primary-500/10 px-5 py-2.5 text-sm font-semibold text-primary-500 transition hover:bg-primary-500/15 hover:text-primary-600"
               >
                 View All Services
 
@@ -949,6 +926,12 @@ onMounted(loadService);
   color: #000000;
 }
 
+/*
+|--------------------------------------------------------------------------
+| PARAGRAPHS
+|--------------------------------------------------------------------------
+*/
+
 .service-description :deep(p) {
   margin-bottom: 1rem;
   color: #000000;
@@ -957,6 +940,12 @@ onMounted(loadService);
 .service-description :deep(p:last-child) {
   margin-bottom: 0;
 }
+
+/*
+|--------------------------------------------------------------------------
+| LISTS
+|--------------------------------------------------------------------------
+*/
 
 .service-description :deep(ul),
 .service-description :deep(ol) {
@@ -978,10 +967,27 @@ onMounted(loadService);
   color: #000000;
 }
 
-.service-description :deep(strong) {
+.service-description :deep(li::marker) {
+  color: #43b5e3;
+}
+
+/*
+|--------------------------------------------------------------------------
+| STRONG
+|--------------------------------------------------------------------------
+*/
+
+.service-description :deep(strong),
+.service-description :deep(b) {
   font-weight: 600;
   color: #0f172a;
 }
+
+/*
+|--------------------------------------------------------------------------
+| HEADINGS
+|--------------------------------------------------------------------------
+*/
 
 .service-description :deep(h1),
 .service-description :deep(h2),
@@ -993,8 +999,20 @@ onMounted(loadService);
   color: #0f172a;
 }
 
+/*
+|--------------------------------------------------------------------------
+| LINKS
+|--------------------------------------------------------------------------
+*/
+
 .service-description :deep(a) {
-  color: #1675e3;
+  color: #43b5e3;
+  font-weight: 500;
   text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.service-description :deep(a:hover) {
+  color: #319ecc;
 }
 </style>
