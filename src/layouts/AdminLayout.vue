@@ -39,12 +39,13 @@
           <div class="hidden sm:block">
             <p class="text-lg font-bold leading-none text-slate-900">
               Explore
-              <span class="text-primary-600"> Koh Rong </span>
+              <span class="text-primary-600">Koh Rong</span>
             </p>
 
             <p class="mt-1 text-xs text-slate-400">Administration</p>
           </div>
         </RouterLink>
+
         <Button
           icon="pi pi-times"
           text
@@ -76,7 +77,7 @@
           >
             <i class="pi pi-home text-lg" />
 
-            <span> Dashboard </span>
+            <span>Dashboard</span>
           </RouterLink>
         </nav>
 
@@ -99,7 +100,7 @@
           >
             <i class="pi pi-users text-lg" />
 
-            <span> Users </span>
+            <span>Users</span>
           </RouterLink>
 
           <!-- CATEGORIES -->
@@ -111,7 +112,7 @@
           >
             <i class="pi pi-tags text-lg" />
 
-            <span> Categories </span>
+            <span>Categories</span>
           </RouterLink>
 
           <!-- SERVICES -->
@@ -123,7 +124,7 @@
           >
             <i class="pi pi-briefcase text-lg" />
 
-            <span> Services </span>
+            <span>Services</span>
           </RouterLink>
 
           <!-- BOOKINGS -->
@@ -135,19 +136,7 @@
           >
             <i class="pi pi-calendar text-lg" />
 
-            <span> Bookings </span>
-          </RouterLink>
-
-          <!-- REVIEWS -->
-
-          <RouterLink
-            to="/admin/reviews"
-            :class="navClass('/admin/reviews')"
-            @click="mobileSidebarVisible = false"
-          >
-            <i class="pi pi-star text-lg" />
-
-            <span> Reviews </span>
+            <span>Bookings</span>
           </RouterLink>
 
           <!-- BLOGS -->
@@ -159,7 +148,7 @@
           >
             <i class="pi pi-file-edit text-lg" />
 
-            <span> Blogs </span>
+            <span>Blogs</span>
           </RouterLink>
 
           <!-- REPORTS -->
@@ -171,7 +160,7 @@
           >
             <i class="pi pi-chart-bar text-lg" />
 
-            <span> Reports </span>
+            <span>Reports</span>
           </RouterLink>
         </nav>
 
@@ -191,7 +180,7 @@
           >
             <i class="pi pi-user text-lg" />
 
-            <span> My Profile </span>
+            <span>My Profile</span>
           </RouterLink>
         </nav>
       </div>
@@ -339,32 +328,12 @@
           <!-- ================================================= -->
 
           <Transition
-            enter-active-class="
-              transition
-              duration-150
-              ease-out
-            "
-            enter-from-class="
-              translate-y-1
-              opacity-0
-            "
-            enter-to-class="
-              translate-y-0
-              opacity-100
-            "
-            leave-active-class="
-              transition
-              duration-100
-              ease-in
-            "
-            leave-from-class="
-              translate-y-0
-              opacity-100
-            "
-            leave-to-class="
-              translate-y-1
-              opacity-0
-            "
+            enter-active-class="transition duration-150 ease-out"
+            enter-from-class="translate-y-1 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition duration-100 ease-in"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-1 opacity-0"
           >
             <div
               v-if="profileMenuVisible"
@@ -457,6 +426,7 @@ import Tag from "primevue/tag";
 
 import { useAuthStore } from "../stores/auth.js";
 import { siteConfig } from "../config/site.js";
+
 /*
 |--------------------------------------------------------------------------
 | ROUTER
@@ -605,10 +575,6 @@ const pageTitle = computed(() => {
     return "Bookings";
   }
 
-  if (route.path.startsWith("/admin/reviews")) {
-    return "Reviews";
-  }
-
   if (route.path.startsWith("/admin/blogs")) {
     return "Blogs";
   }
@@ -654,9 +620,6 @@ function navClass(path) {
 |--------------------------------------------------------------------------
 | LOAD LATEST USER
 |--------------------------------------------------------------------------
-|
-| Important for profile avatar.
-|
 */
 
 async function refreshCurrentUser() {
@@ -697,7 +660,6 @@ async function logout() {
       await auth.logout();
     } else {
       localStorage.removeItem("token");
-
       localStorage.removeItem("user");
     }
   } finally {
@@ -725,23 +687,15 @@ function handleDocumentClick(event) {
 |--------------------------------------------------------------------------
 | WATCH AVATAR
 |--------------------------------------------------------------------------
-|
-| When profile photo changes,
-| retry all image elements.
-|
 */
 
-watch(
-  avatarUrl,
+watch(avatarUrl, () => {
+  sidebarAvatarFailed.value = false;
 
-  () => {
-    sidebarAvatarFailed.value = false;
+  headerAvatarFailed.value = false;
 
-    headerAvatarFailed.value = false;
-
-    dropdownAvatarFailed.value = false;
-  },
-);
+  dropdownAvatarFailed.value = false;
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -751,7 +705,6 @@ watch(
 
 watch(
   () => route.fullPath,
-
   () => {
     profileMenuVisible.value = false;
 

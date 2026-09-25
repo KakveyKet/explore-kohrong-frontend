@@ -136,9 +136,8 @@
               v-for="(paragraph, index) in paragraphs"
               :key="index"
               class="text-sm leading-7 text-black sm:text-base sm:leading-8"
-            >
-              {{ paragraph }}
-            </p>
+              v-html="paragraph"
+            />
           </div>
 
           <!-- ==================================================
@@ -257,8 +256,6 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-
 import { Icon } from "@iconify/vue";
 
 import { aboutData } from "../../data/about.js";
@@ -277,13 +274,20 @@ const about = aboutData;
 |--------------------------------------------------------------------------
 */
 
-const paragraphs = computed(() => {
-  return String(about.content || "")
-    .trim()
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.replace(/\s+/g, " ").trim())
-    .filter(Boolean);
-});
+const paragraphs = [
+  `
+    <strong>Explore Koh Rong</strong> helps you discover the island through
+    the best local activities and experiences. With excellent English speaking
+    and writing skills, our local guide can help you explore Koh Rong’s nature,
+    culture, local communities, and hidden places.
+  `,
+
+  `
+    We also help guests find
+    <strong>good quality accommodation at reasonable prices</strong>,
+    based on their budget and preferred location.
+  `,
+];
 
 /*
 |--------------------------------------------------------------------------

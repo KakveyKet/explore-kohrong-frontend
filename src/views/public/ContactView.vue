@@ -202,29 +202,43 @@
     </section>
   </main>
 </template>
-
 <script setup>
 import { computed } from "vue";
-
 import { Icon } from "@iconify/vue";
 
 /*
 |--------------------------------------------------------------------------
-| CONFIG
+| CONTACT INFORMATION
 |--------------------------------------------------------------------------
 */
 
-const businessEmail = import.meta.env.VITE_BUSINESS_EMAIL || "";
+const businessEmail = "explorekohrong@gmail.com";
 
-const whatsAppNumber = String(
-  import.meta.env.VITE_WHATSAPP_BUSINESS_NUMBER || "855885792065",
-).replace(/\D/g, "");
+const phoneNumber = "+855 88 579 2065";
 
-const telegramUrl = import.meta.env.VITE_TELEGRAM_URL || "#";
+/*
+ * WhatsApp requires the number without:
+ * +
+ * spaces
+ * dashes
+ */
+const whatsAppNumber = "855885792065";
 
-const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL || "#";
+/*
+|--------------------------------------------------------------------------
+| SOCIAL LINKS
+|--------------------------------------------------------------------------
+*/
 
-const facebookUrl = import.meta.env.VITE_FACEBOOK_URL || "#";
+const telegramUsername = "@norea_yem";
+
+const telegramUrl = "https://t.me/norea_yem";
+
+/*
+ * Facebook and Instagram will be updated in the next step.
+ */
+const instagramUrl = "#";
+const facebookUrl = "#";
 
 /*
 |--------------------------------------------------------------------------
@@ -248,11 +262,11 @@ const contacts = computed(() => [
 
     text: "Send us an email for questions and booking support.",
 
-    value: businessEmail || "Email us",
+    value: businessEmail,
 
     icon: "ri:mail-fill",
 
-    href: businessEmail ? `mailto:${businessEmail}` : "#",
+    href: `mailto:${businessEmail}`,
 
     action: "Send Email",
 
@@ -264,7 +278,7 @@ const contacts = computed(() => [
 
     text: "Call us directly if you need quick assistance.",
 
-    value: "(+855) 885 792 065",
+    value: phoneNumber,
 
     icon: "ri:phone-fill",
 
@@ -280,7 +294,7 @@ const contacts = computed(() => [
 
     text: "Chat with us through Telegram.",
 
-    value: "",
+    value: telegramUsername,
 
     icon: "ri:telegram-2-fill",
 
@@ -296,7 +310,7 @@ const contacts = computed(() => [
 
     text: "Message us directly about your booking.",
 
-    value: "(+855) 885 792 065",
+    value: phoneNumber,
 
     icon: "ri:whatsapp-fill",
 

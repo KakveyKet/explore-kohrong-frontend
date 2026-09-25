@@ -8,10 +8,6 @@
       <template #start>
         <div>
           <h1 class="text-3xl font-bold">Dashboard</h1>
-
-          <!-- <p class="mt-1 text-sm text-slate-500">
-            Overview of your booking platform.
-          </p> -->
         </div>
       </template>
 
@@ -31,7 +27,7 @@
     <!-- SUMMARY CARDS -->
     <!-- ====================================================== -->
 
-    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
       <Card v-for="card in cards" :key="card.label" class="!rounded-2xl">
         <template #content>
           <div class="flex items-start justify-between">
@@ -209,17 +205,14 @@ let socket;
 | DASHBOARD CARDS
 |--------------------------------------------------------------------------
 |
-| No:
+| Version 1:
 |
-| Revenue
-| Pending card
-| Accepted card
+| Customers
+| Categories
+| Services
+| Total Bookings
 |
-| Total Bookings = all booking records:
-|
-| PENDING
-| ACCEPT
-| REJECT
+| Reviews and Comments are not displayed.
 |
 */
 
@@ -254,22 +247,6 @@ const cards = computed(() => [
     value: data.value.totalBookings || 0,
 
     icon: "pi pi-calendar",
-  },
-
-  {
-    label: "Reviews",
-
-    value: data.value.reviews || 0,
-
-    icon: "pi pi-star",
-  },
-
-  {
-    label: "Comments",
-
-    value: data.value.comments || 0,
-
-    icon: "pi pi-comments",
   },
 ]);
 

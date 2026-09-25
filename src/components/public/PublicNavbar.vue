@@ -13,13 +13,18 @@
 
           <!-- DESKTOP -->
 
-          <span class="hidden sm:inline">
-            (+855) 885 792 065 / (+855) 979 938 857
-          </span>
+          <a
+            :href="phoneUrl"
+            class="hidden transition hover:text-white/80 sm:inline"
+          >
+            {{ phoneDisplay }}
+          </a>
 
           <!-- MOBILE -->
 
-          <a href="tel:+855885792065" class="sm:hidden"> (+855) 885 792 065 </a>
+          <a :href="phoneUrl" class="transition hover:text-white/80 sm:hidden">
+            {{ phoneDisplay }}
+          </a>
         </div>
 
         <!-- ==================================================
@@ -42,7 +47,7 @@
           <!-- TELEGRAM -->
 
           <a
-            href="#"
+            :href="telegramUrl"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Telegram"
@@ -66,7 +71,7 @@
           <!-- WHATSAPP -->
 
           <a
-            href="#"
+            :href="whatsAppUrl"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
@@ -224,7 +229,7 @@
                       <Icon icon="lucide:user-round" class="h-4 w-4" />
                     </div>
 
-                    <span> My Profile </span>
+                    <span>My Profile</span>
                   </RouterLink>
 
                   <!-- ==================================================
@@ -242,7 +247,7 @@
                       <Icon icon="lucide:calendar-days" class="h-4 w-4" />
                     </div>
 
-                    <span> My Bookings </span>
+                    <span>My Bookings</span>
                   </RouterLink>
 
                   <!-- ==================================================
@@ -453,23 +458,53 @@
               Contact
             </p>
 
-            <div class="mt-2 space-y-2">
+            <div class="mt-3 space-y-3">
+              <!-- PHONE -->
+
               <a
-                href="tel:+855885792065"
+                :href="phoneUrl"
                 class="flex items-center gap-2 text-sm font-medium text-primary-600"
               >
                 <Icon icon="lucide:phone" class="h-4 w-4" />
 
-                (+855) 885 792 065
+                {{ phoneDisplay }}
               </a>
 
+              <!-- EMAIL -->
+
               <a
-                href="tel:+855979938857"
+                :href="emailUrl"
+                class="flex items-center gap-2 break-all text-sm font-medium text-primary-600"
+              >
+                <Icon icon="lucide:mail" class="h-4 w-4 shrink-0" />
+
+                {{ businessEmail }}
+              </a>
+
+              <!-- TELEGRAM -->
+
+              <a
+                :href="telegramUrl"
+                target="_blank"
+                rel="noopener noreferrer"
                 class="flex items-center gap-2 text-sm font-medium text-primary-600"
               >
-                <Icon icon="lucide:phone" class="h-4 w-4" />
+                <Icon icon="ri:telegram-2-fill" class="h-4 w-4" />
 
-                (+855) 979 938 857
+                @norea_yem
+              </a>
+
+              <!-- WHATSAPP -->
+
+              <a
+                :href="whatsAppUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-2 text-sm font-medium text-primary-600"
+              >
+                <Icon icon="ri:whatsapp-fill" class="h-4 w-4" />
+
+                WhatsApp
               </a>
             </div>
           </div>
@@ -529,6 +564,40 @@ const authDialogVisible = ref(false);
 const accountMenuOpen = ref(false);
 
 const accountMenuRef = ref(null);
+
+/*
+|--------------------------------------------------------------------------
+| CONTACT CONFIG
+|--------------------------------------------------------------------------
+*/
+
+const businessEmail =
+  import.meta.env.VITE_BUSINESS_EMAIL || "explorekohrong@gmail.com";
+
+const whatsAppNumber = String(
+  import.meta.env.VITE_WHATSAPP_BUSINESS_NUMBER || "855885792065",
+).replace(/\D/g, "");
+
+const telegramUrl =
+  import.meta.env.VITE_TELEGRAM_URL || "https://t.me/norea_yem";
+
+/*
+|--------------------------------------------------------------------------
+| CONTACT DISPLAY
+|--------------------------------------------------------------------------
+*/
+
+const phoneDisplay = "+855 88 579 2065";
+
+const phoneUrl = "tel:+855885792065";
+
+const emailUrl = computed(() => {
+  return `mailto:${businessEmail}`;
+});
+
+const whatsAppUrl = computed(() => {
+  return `https://wa.me/${whatsAppNumber}`;
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -736,7 +805,6 @@ async function logout() {
 
       auth.$patch({
         token: null,
-
         user: null,
       });
     }
@@ -749,7 +817,6 @@ async function logout() {
 
     auth.$patch({
       token: null,
-
       user: null,
     });
   }

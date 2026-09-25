@@ -53,7 +53,7 @@
         <h1
           class="mt-5 text-center text-[30px] font-bold leading-[1.15] tracking-tight text-white min-[390px]:text-[34px] sm:hidden"
         >
-          <span class="block"> Explore Koh Rong — </span>
+          <span class="block"> Explore Koh Rong </span>
 
           <span class="mt-1 block"> The Best Way to Discover the Island </span>
         </h1>
@@ -62,7 +62,7 @@
         <h1
           class="mt-5 hidden max-w-4xl font-bold leading-[1.08] tracking-tight text-white sm:block sm:text-5xl lg:text-6xl xl:text-7xl"
         >
-          Explore Koh Rong —
+          Explore Koh Rong
 
           <span class="mt-1 block"> The Best Way to Discover the Island </span>
         </h1>
