@@ -69,8 +69,9 @@
         <p
           class="mx-auto mt-5 max-w-3xl text-center text-sm leading-7 text-white/90 sm:mx-0 sm:text-left sm:text-base sm:leading-8 lg:text-lg"
         >
-          Discover beautiful beaches, exciting boat trips, convenient transport,
-          scooter rentals and unforgettable local experiences around Koh Rong.
+          private and sharing boat trips, island tours by tuk-tuk, jungle
+          trekking and pagoda tours, fishing and snorkeling, sunset experiences,
+          scooter rentals, taxi pick up, accommodation assistance
         </p>
 
         <!-- ==================================================

@@ -309,7 +309,7 @@ const features = [
     title: "Island Activities",
 
     description:
-      "Boat trips, snorkeling, transport, rentals and local experiences.",
+      "private and sharing boat trips, island tours by tuk-tuk, jungle trekking and pagoda tours, fishing and snorkeling, sunset experiences, scooter rentals, taxi pick up, accommodation assistance",
 
     icon: "ri:compass-3-fill",
   },
