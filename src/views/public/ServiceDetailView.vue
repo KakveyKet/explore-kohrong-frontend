@@ -193,7 +193,9 @@ async function loadService() {
 
   if (!isValidServiceId(serviceId.value)) {
     error.value = "Invalid service.";
+
     loading.value = false;
+
     return;
   }
 
@@ -379,13 +381,15 @@ onMounted(loadService);
 
 <template>
   <main class="min-h-screen bg-white pb-16">
-    <!-- ======================================================
-         BREADCRUMB
-    ======================================================= -->
+    <!-- ====================================================== -->
+    <!-- BREADCRUMB -->
+    <!-- ====================================================== -->
 
     <section class="border-b border-border bg-white">
       <div class="page py-3">
-        <div class="flex flex-wrap items-center gap-1.5 text-xs text-black">
+        <div
+          class="flex min-w-0 flex-wrap items-center gap-1.5 text-xs text-black"
+        >
           <RouterLink to="/" class="transition hover:text-primary-600">
             Home
           </RouterLink>
@@ -399,7 +403,9 @@ onMounted(loadService);
           <template v-if="service">
             <Icon icon="ri:arrow-right-s-line" />
 
-            <span class="max-w-[420px] truncate font-medium text-heading">
+            <span
+              class="max-w-full break-words font-medium text-heading sm:max-w-[420px] sm:truncate"
+            >
               {{ service.name }}
             </span>
           </template>
@@ -407,9 +413,9 @@ onMounted(loadService);
       </div>
     </section>
 
-    <!-- ======================================================
-         LOADING
-    ======================================================= -->
+    <!-- ====================================================== -->
+    <!-- LOADING -->
+    <!-- ====================================================== -->
 
     <section v-if="loading" class="page py-8">
       <div
@@ -435,9 +441,9 @@ onMounted(loadService);
       </div>
     </section>
 
-    <!-- ======================================================
-         ERROR
-    ======================================================= -->
+    <!-- ====================================================== -->
+    <!-- ERROR -->
+    <!-- ====================================================== -->
 
     <section v-else-if="!service" class="page py-16">
       <div
@@ -448,9 +454,11 @@ onMounted(loadService);
           class="mx-auto text-4xl text-red-500"
         />
 
-        <h1 class="mt-4 text-xl font-bold text-heading">Service unavailable</h1>
+        <h1 class="mt-4 break-words text-xl font-bold text-heading">
+          Service unavailable
+        </h1>
 
-        <p class="mt-2 text-sm text-black">
+        <p class="mt-2 break-words text-sm text-black">
           {{ error || "Service not found." }}
         </p>
 
@@ -464,25 +472,25 @@ onMounted(loadService);
       </div>
     </section>
 
-    <!-- ======================================================
-         SERVICE DETAIL
-    ======================================================= -->
+    <!-- ====================================================== -->
+    <!-- SERVICE DETAIL -->
+    <!-- ====================================================== -->
 
     <template v-else>
       <section class="page py-6 sm:py-8">
-        <div class="mx-auto max-w-6xl">
-          <!-- ==================================================
-               TOP DETAIL
-          =================================================== -->
+        <div class="mx-auto min-w-0 max-w-6xl">
+          <!-- ================================================== -->
+          <!-- TOP DETAIL -->
+          <!-- ================================================== -->
 
           <div
-            class="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]"
+            class="grid min-w-0 items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]"
           >
-            <!-- =================================================
-                 LEFT IMAGE
-            ================================================== -->
+            <!-- ================================================= -->
+            <!-- LEFT IMAGE -->
+            <!-- ================================================= -->
 
-            <div>
+            <div class="min-w-0">
               <!-- MAIN IMAGE -->
 
               <div
@@ -544,15 +552,15 @@ onMounted(loadService);
               </div>
             </div>
 
-            <!-- =================================================
-                 RIGHT INFO
-            ================================================== -->
+            <!-- ================================================= -->
+            <!-- RIGHT INFO -->
+            <!-- ================================================= -->
 
-            <div>
+            <div class="min-w-0">
               <!-- CATEGORY -->
 
               <p
-                class="text-xs font-semibold uppercase tracking-wide text-primary-500"
+                class="break-words text-xs font-semibold uppercase tracking-wide text-primary-500"
               >
                 {{ categoryName }}
               </p>
@@ -560,7 +568,7 @@ onMounted(loadService);
               <!-- TITLE -->
 
               <h1
-                class="mt-2 text-3xl font-bold leading-tight tracking-tight text-heading sm:text-4xl"
+                class="mt-2 break-words text-3xl font-bold leading-tight tracking-tight text-heading sm:text-4xl"
               >
                 {{ service.name }}
               </h1>
@@ -569,37 +577,37 @@ onMounted(loadService);
 
               <div class="mt-5 border-b border-border" />
 
-              <!-- =================================================
-                   INFO LIST
-              ================================================== -->
+              <!-- ================================================= -->
+              <!-- INFO LIST -->
+              <!-- ================================================= -->
 
               <div class="mt-6 space-y-4">
                 <!-- CATEGORY -->
 
-                <div class="flex items-center gap-3 text-sm">
+                <div class="flex min-w-0 items-start gap-3 text-sm">
                   <Icon
                     icon="ri:price-tag-3-line"
-                    class="w-5 shrink-0 text-primary-500"
+                    class="mt-0.5 w-5 shrink-0 text-primary-500"
                   />
 
-                  <span class="w-24 text-black"> Category: </span>
+                  <span class="w-24 shrink-0 text-black"> Category: </span>
 
-                  <span class="font-semibold text-heading">
+                  <span class="min-w-0 break-words font-semibold text-heading">
                     {{ categoryName }}
                   </span>
                 </div>
 
                 <!-- STATUS -->
 
-                <div class="flex items-center gap-3 text-sm">
+                <div class="flex min-w-0 items-start gap-3 text-sm">
                   <Icon
                     icon="ri:checkbox-circle-line"
-                    class="w-5 shrink-0 text-primary-500"
+                    class="mt-0.5 w-5 shrink-0 text-primary-500"
                   />
 
-                  <span class="w-24 text-black"> Availability: </span>
+                  <span class="w-24 shrink-0 text-black"> Availability: </span>
 
-                  <span class="font-semibold text-heading">
+                  <span class="min-w-0 break-words font-semibold text-heading">
                     {{
                       String(service.status || "ACTIVE").toUpperCase() ===
                       "ACTIVE"
@@ -611,37 +619,39 @@ onMounted(loadService);
 
                 <!-- EXPERIENCE -->
 
-                <div class="flex items-center gap-3 text-sm">
+                <div class="flex min-w-0 items-start gap-3 text-sm">
                   <Icon
                     icon="ri:compass-3-line"
-                    class="w-5 shrink-0 text-primary-500"
+                    class="mt-0.5 w-5 shrink-0 text-primary-500"
                   />
 
-                  <span class="w-24 text-black"> Experience: </span>
+                  <span class="w-24 shrink-0 text-black"> Experience: </span>
 
-                  <span class="font-semibold text-heading">
+                  <span class="min-w-0 break-words font-semibold text-heading">
                     Koh Rong Service
                   </span>
                 </div>
               </div>
 
-              <!-- =================================================
-                   PRICE
-              ================================================== -->
+              <!-- ================================================= -->
+              <!-- PRICE -->
+              <!-- ================================================= -->
 
               <div class="mt-7 border-t border-border pt-5">
                 <p class="text-sm font-medium text-black">Starting Price</p>
 
-                <div class="mt-1 flex items-end gap-2">
-                  <span class="text-3xl font-bold text-primary-500 sm:text-4xl">
+                <div class="mt-1 flex min-w-0 flex-wrap items-end gap-2">
+                  <span
+                    class="break-words text-3xl font-bold text-primary-500 sm:text-4xl"
+                  >
                     {{ formatPrice(service.price) }}
                   </span>
                 </div>
               </div>
 
-              <!-- =================================================
-                   BOOK NOW
-              ================================================== -->
+              <!-- ================================================= -->
+              <!-- BOOK NOW -->
+              <!-- ================================================= -->
 
               <div class="mt-6">
                 <button
@@ -658,37 +668,39 @@ onMounted(loadService);
               <!-- SAFE NOTE -->
 
               <div
-                class="mt-5 flex items-start gap-2 text-xs leading-5 text-black"
+                class="mt-5 flex min-w-0 items-start gap-2 text-xs leading-5 text-black"
               >
                 <Icon
                   icon="ri:shield-check-line"
                   class="mt-0.5 shrink-0 text-primary-500"
                 />
 
-                <span>
+                <span class="min-w-0 break-words">
                   Review the service information before completing your booking.
                 </span>
               </div>
             </div>
           </div>
 
-          <!-- ==================================================
-               DESCRIPTION
-          =================================================== -->
+          <!-- ================================================== -->
+          <!-- DESCRIPTION -->
+          <!-- ================================================== -->
 
-          <section class="mt-10 border-t border-border pt-8">
-            <div class="max-w-4xl">
+          <section class="mt-10 min-w-0 border-t border-border pt-8">
+            <div class="min-w-0 max-w-4xl">
               <!-- LABEL -->
 
               <p
-                class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-500"
+                class="break-words text-xs font-semibold uppercase tracking-[0.16em] text-primary-500"
               >
                 Service Information
               </p>
 
               <!-- TITLE -->
 
-              <h2 class="mt-2 text-2xl font-bold text-heading sm:text-3xl">
+              <h2
+                class="mt-2 break-words text-2xl font-bold text-heading sm:text-3xl"
+              >
                 Description
               </h2>
 
@@ -696,7 +708,7 @@ onMounted(loadService);
 
               <div
                 v-if="service.description"
-                class="service-description mt-5 text-sm leading-7 text-black sm:text-base sm:leading-8"
+                class="service-description mt-5 min-w-0 max-w-full break-words text-sm leading-7 text-black sm:text-base sm:leading-8"
                 v-html="service.description"
               />
 
@@ -704,40 +716,44 @@ onMounted(loadService);
 
               <div
                 v-else
-                class="mt-5 rounded-xl bg-surface-soft p-6 text-sm text-black"
+                class="mt-5 min-w-0 break-words rounded-xl bg-surface-soft p-6 text-sm text-black"
               >
                 No description is available for this service.
               </div>
             </div>
           </section>
 
-          <!-- ==================================================
-               RELATED SERVICES
-          =================================================== -->
+          <!-- ================================================== -->
+          <!-- RELATED SERVICES -->
+          <!-- ================================================== -->
 
-          <section class="mt-14 border-t border-border pt-8">
+          <section class="mt-14 min-w-0 border-t border-border pt-8">
             <!-- HEADER -->
 
-            <div class="flex items-end justify-between gap-4">
-              <div>
+            <div class="flex min-w-0 items-end justify-between gap-4">
+              <div class="min-w-0">
                 <p
-                  class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-500"
+                  class="break-words text-xs font-semibold uppercase tracking-[0.16em] text-primary-500"
                 >
                   Explore More
                 </p>
 
-                <h2 class="mt-1 text-2xl font-bold text-heading sm:text-3xl">
+                <h2
+                  class="mt-1 break-words text-2xl font-bold text-heading sm:text-3xl"
+                >
                   Related Services
                 </h2>
 
-                <p class="mt-2 text-sm leading-6 text-black sm:text-base">
+                <p
+                  class="mt-2 break-words text-sm leading-6 text-black sm:text-base"
+                >
                   More experiences you may also enjoy.
                 </p>
               </div>
 
               <RouterLink
                 to="/services"
-                class="hidden items-center gap-1 text-sm font-semibold text-primary-500 transition hover:text-primary-600 sm:flex"
+                class="hidden shrink-0 items-center gap-1 text-sm font-semibold text-primary-500 transition hover:text-primary-600 sm:flex"
               >
                 View All
 
@@ -745,9 +761,9 @@ onMounted(loadService);
               </RouterLink>
             </div>
 
-            <!-- =================================================
-                 RELATED LOADING
-            ================================================== -->
+            <!-- ================================================= -->
+            <!-- RELATED LOADING -->
+            <!-- ================================================= -->
 
             <div
               v-if="relatedLoading"
@@ -770,9 +786,9 @@ onMounted(loadService);
               </div>
             </div>
 
-            <!-- =================================================
-                 RELATED LIST
-            ================================================== -->
+            <!-- ================================================= -->
+            <!-- RELATED LIST -->
+            <!-- ================================================= -->
 
             <div
               v-else-if="relatedServices.length"
@@ -781,7 +797,7 @@ onMounted(loadService);
               <article
                 v-for="item in relatedServices"
                 :key="item._id"
-                class="group overflow-hidden rounded-xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:border-primary-500/40 hover:shadow-md"
+                class="group min-w-0 overflow-hidden rounded-xl border border-border bg-white transition duration-300 hover:-translate-y-1 hover:border-primary-500/40 hover:shadow-md"
               >
                 <!-- IMAGE -->
 
@@ -815,11 +831,11 @@ onMounted(loadService);
 
                 <!-- CONTENT -->
 
-                <div class="flex min-h-[145px] flex-col p-4">
+                <div class="flex min-h-[145px] min-w-0 flex-col p-4">
                   <!-- CATEGORY -->
 
                   <p
-                    class="text-[10px] font-semibold uppercase tracking-wide text-primary-500"
+                    class="break-words text-[10px] font-semibold uppercase tracking-wide text-primary-500"
                   >
                     {{ relatedCategoryName(item) }}
                   </p>
@@ -828,11 +844,11 @@ onMounted(loadService);
 
                   <button
                     type="button"
-                    class="mt-1 text-left"
+                    class="mt-1 min-w-0 text-left"
                     @click="openService(item)"
                   >
                     <h3
-                      class="line-clamp-2 text-base font-semibold leading-6 text-heading transition group-hover:text-primary-600"
+                      class="line-clamp-2 break-words text-base font-semibold leading-6 text-heading transition group-hover:text-primary-600"
                     >
                       {{ item.name }}
                     </h3>
@@ -855,20 +871,20 @@ onMounted(loadService);
               </article>
             </div>
 
-            <!-- =================================================
-                 NO RELATED
-            ================================================== -->
+            <!-- ================================================= -->
+            <!-- NO RELATED -->
+            <!-- ================================================= -->
 
             <div
               v-else
-              class="mt-6 rounded-xl bg-surface-soft p-8 text-center text-sm text-black"
+              class="mt-6 break-words rounded-xl bg-surface-soft p-8 text-center text-sm text-black"
             >
               No related services are available at the moment.
             </div>
 
-            <!-- =================================================
-                 MOBILE VIEW ALL
-            ================================================== -->
+            <!-- ================================================= -->
+            <!-- MOBILE VIEW ALL -->
+            <!-- ================================================= -->
 
             <div
               v-if="relatedServices.length"
@@ -887,9 +903,9 @@ onMounted(loadService);
         </div>
       </section>
 
-      <!-- ======================================================
-           IMAGE PREVIEW
-      ======================================================= -->
+      <!-- ====================================================== -->
+      <!-- IMAGE PREVIEW -->
+      <!-- ====================================================== -->
 
       <Dialog
         v-model:visible="imageDialog"
@@ -923,7 +939,30 @@ onMounted(loadService);
 */
 
 .service-description {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
   color: #000000;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ALL CHILD ELEMENTS
+|--------------------------------------------------------------------------
+|
+| Important for content entered from the admin editor.
+|
+*/
+
+.service-description :deep(*) {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /*
@@ -933,12 +972,96 @@ onMounted(loadService);
 */
 
 .service-description :deep(p) {
+  width: 100%;
+  max-width: 100%;
+
   margin-bottom: 1rem;
+
   color: #000000;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .service-description :deep(p:last-child) {
   margin-bottom: 0;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HEADINGS
+|--------------------------------------------------------------------------
+*/
+
+.service-description :deep(h1),
+.service-description :deep(h2),
+.service-description :deep(h3),
+.service-description :deep(h4),
+.service-description :deep(h5),
+.service-description :deep(h6) {
+  width: 100%;
+  max-width: 100%;
+
+  margin-top: 1.25rem;
+  margin-bottom: 0.65rem;
+
+  font-weight: 600;
+
+  line-height: 1.4;
+
+  color: #0f172a;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE HEADING SIZE
+|--------------------------------------------------------------------------
+*/
+
+.service-description :deep(h1) {
+  font-size: 1.5rem;
+}
+
+.service-description :deep(h2) {
+  font-size: 1.35rem;
+}
+
+.service-description :deep(h3) {
+  font-size: 1.2rem;
+}
+
+.service-description :deep(h4) {
+  font-size: 1.1rem;
+}
+
+.service-description :deep(h5),
+.service-description :deep(h6) {
+  font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+  .service-description :deep(h1) {
+    font-size: 1.875rem;
+  }
+
+  .service-description :deep(h2) {
+    font-size: 1.5rem;
+  }
+
+  .service-description :deep(h3) {
+    font-size: 1.25rem;
+  }
+
+  .service-description :deep(h4) {
+    font-size: 1.125rem;
+  }
 }
 
 /*
@@ -949,9 +1072,19 @@ onMounted(loadService);
 
 .service-description :deep(ul),
 .service-description :deep(ol) {
+  width: 100%;
+  max-width: 100%;
+
   margin: 1rem 0;
+
   padding-left: 1.5rem;
+
   color: #000000;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .service-description :deep(ul) {
@@ -963,8 +1096,16 @@ onMounted(loadService);
 }
 
 .service-description :deep(li) {
+  max-width: 100%;
+
   margin-bottom: 0.4rem;
+
   color: #000000;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .service-description :deep(li::marker) {
@@ -981,38 +1122,216 @@ onMounted(loadService);
 .service-description :deep(b) {
   font-weight: 600;
   color: #0f172a;
-}
 
-/*
-|--------------------------------------------------------------------------
-| HEADINGS
-|--------------------------------------------------------------------------
-*/
-
-.service-description :deep(h1),
-.service-description :deep(h2),
-.service-description :deep(h3),
-.service-description :deep(h4) {
-  margin-top: 1.25rem;
-  margin-bottom: 0.65rem;
-  font-weight: 600;
-  color: #0f172a;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /*
 |--------------------------------------------------------------------------
 | LINKS
 |--------------------------------------------------------------------------
+|
+| Long URLs will wrap instead of pushing the page wider.
+|
 */
 
 .service-description :deep(a) {
+  display: inline;
+
+  max-width: 100%;
+
   color: #43b5e3;
+
   font-weight: 500;
+
   text-decoration: underline;
   text-underline-offset: 3px;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .service-description :deep(a:hover) {
   color: #319ecc;
+}
+
+/*
+|--------------------------------------------------------------------------
+| IMAGES
+|--------------------------------------------------------------------------
+*/
+
+.service-description :deep(img) {
+  display: block;
+
+  width: auto;
+  max-width: 100%;
+  height: auto;
+
+  margin: 1rem 0;
+
+  border-radius: 0.75rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| VIDEO
+|--------------------------------------------------------------------------
+*/
+
+.service-description :deep(video) {
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+
+  margin: 1rem 0;
+
+  border-radius: 0.75rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| IFRAME
+|--------------------------------------------------------------------------
+*/
+
+.service-description :deep(iframe) {
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+
+  margin: 1rem 0;
+
+  border: 0;
+  border-radius: 0.75rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| TABLE
+|--------------------------------------------------------------------------
+|
+| Tables can often break mobile layouts.
+|
+*/
+
+.service-description :deep(table) {
+  width: 100%;
+  max-width: 100%;
+
+  table-layout: fixed;
+
+  border-collapse: collapse;
+
+  margin: 1rem 0;
+}
+
+.service-description :deep(th),
+.service-description :deep(td) {
+  max-width: 100%;
+
+  padding: 0.5rem;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/*
+|--------------------------------------------------------------------------
+| BLOCKQUOTE
+|--------------------------------------------------------------------------
+*/
+
+.service-description :deep(blockquote) {
+  width: 100%;
+  max-width: 100%;
+
+  margin: 1rem 0;
+
+  padding-left: 1rem;
+
+  border-left: 3px solid #43b5e3;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/*
+|--------------------------------------------------------------------------
+| PRE
+|--------------------------------------------------------------------------
+*/
+
+.service-description :deep(pre) {
+  width: 100%;
+  max-width: 100%;
+
+  overflow-x: auto;
+
+  padding: 1rem;
+
+  white-space: pre-wrap;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CODE
+|--------------------------------------------------------------------------
+*/
+
+.service-description :deep(code) {
+  max-width: 100%;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 639px) {
+  .service-description {
+    width: 100%;
+    max-width: 100%;
+
+    overflow-x: hidden;
+  }
+
+  .service-description :deep(p),
+  .service-description :deep(li),
+  .service-description :deep(a),
+  .service-description :deep(strong),
+  .service-description :deep(span),
+  .service-description :deep(div) {
+    max-width: 100%;
+
+    white-space: normal;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .service-description :deep(ul),
+  .service-description :deep(ol) {
+    padding-left: 1.25rem;
+  }
 }
 </style>
