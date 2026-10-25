@@ -193,7 +193,16 @@ const routes = [
 
         component: RegisterView,
       },
-
+      {
+        path: "/privacy-policy",
+        name: "PrivacyPolicy",
+        component: () => import("../views/public/PrivacyPolicyView.vue"),
+      },
+      {
+        path: "/terms-of-service",
+        name: "TermsOfService",
+        component: () => import("../views/public/TermsOfServiceView.vue"),
+      },
       {
         path: "my-bookings",
 

@@ -326,6 +326,16 @@ const menuItems = [
     label: "Contact",
     to: "/contact",
   },
+
+  {
+    label: "Terms of Service",
+    to: "/terms-of-service",
+  },
+
+  {
+    label: "Privacy Policy",
+    to: "/privacy-policy",
+  },
 ];
 
 /*
