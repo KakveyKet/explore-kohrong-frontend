@@ -1,10 +1,7 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
-
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-
 import { Icon } from "@iconify/vue";
-
 import api from "../../services/api.js";
 
 /*
@@ -14,7 +11,6 @@ import api from "../../services/api.js";
 */
 
 const route = useRoute();
-
 const router = useRouter();
 
 /*
@@ -24,11 +20,8 @@ const router = useRouter();
 */
 
 const booking = ref(null);
-
 const loading = ref(true);
-
 const error = ref("");
-
 const copied = ref(false);
 
 /*
@@ -38,14 +31,13 @@ const copied = ref(false);
 */
 
 const details = computed(() => {
-  if (
-    !booking.value?.description ||
-    typeof booking.value.description !== "object"
-  ) {
+  const value = booking.value?.description;
+
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
     return {};
   }
 
-  return booking.value.description;
+  return value;
 });
 
 /*
@@ -83,11 +75,8 @@ const primaryService = computed(() => {
 
   return {
     name: details.value?.service_name || "Service",
-
     price: details.value?.service_price ?? booking.value?.total_price,
-
     thumbnail: "",
-
     images: [],
   };
 });
@@ -102,17 +91,30 @@ const primaryServiceImage = computed(() => {
 
 /*
 |--------------------------------------------------------------------------
-| BOOKING REFERENCE
+| NEW INVOICE / BOOKING NUMBER
 |--------------------------------------------------------------------------
+|
+| Backend generates:
+|
+| AD:001
+| AD:002
+| AD:003
+|
+| Do not generate the number in Vue.
+| Always use the saved number from MongoDB.
+|
 */
 
-const bookingReference = computed(() => {
-  return (
-    booking.value?.booking_code ||
-    booking.value?.code ||
-    booking.value?._id ||
-    "-"
-  );
+const bookingNumber = computed(() => {
+  const number = String(
+    booking.value?.booking_number || details.value?.booking_number || "",
+  ).trim();
+
+  return number || "Not assigned";
+});
+
+const hasBookingNumber = computed(() => {
+  return bookingNumber.value !== "Not assigned";
 });
 
 /*
@@ -140,6 +142,7 @@ const customerName = computed(() => {
 
   return (
     fullName ||
+    customer.value?.displayName ||
     customer.value?.username ||
     details.value?.customer_name ||
     booking.value?.customer_name ||
@@ -176,16 +179,16 @@ const hasCustomerInformation = computed(() => {
 
 /*
 |--------------------------------------------------------------------------
-| PEOPLE
+| GUESTS
 |--------------------------------------------------------------------------
 */
 
 const guestCount = computed(() => {
-  return details.value?.people || booking.value?.people || 1;
+  return Number(details.value?.people || booking.value?.people || 1);
 });
 
 const guestLabel = computed(() => {
-  const people = Number(guestCount.value || 1);
+  const people = guestCount.value;
 
   return `${people} ${people === 1 ? "Guest" : "Guests"}`;
 });
@@ -214,7 +217,7 @@ const paymentLabel = computed(() => {
 
 /*
 |--------------------------------------------------------------------------
-| CHANNEL
+| BOOKING CHANNEL
 |--------------------------------------------------------------------------
 */
 
@@ -233,16 +236,14 @@ const channelLabel = computed(() => {
 });
 
 const channelIcon = computed(() => {
-  if (channelLabel.value === "WhatsApp") {
-    return "ri:whatsapp-line";
-  }
-
-  return "ri:mail-line";
+  return channelLabel.value === "WhatsApp"
+    ? "ri:whatsapp-line"
+    : "ri:mail-line";
 });
 
 /*
 |--------------------------------------------------------------------------
-| NOTE
+| SPECIAL REQUEST
 |--------------------------------------------------------------------------
 */
 
@@ -298,48 +299,24 @@ const isRejected = computed(() => {
   );
 });
 
+const isCancelled = computed(() => {
+  return ["CANCELLED", "CANCELED"].includes(normalizedStatus.value);
+});
+
 const statusLabel = computed(() => {
-  if (isConfirmed.value) {
-    return "Confirmed";
-  }
-
-  if (isCompleted.value) {
-    return "Completed";
-  }
-
-  if (
-    normalizedStatus.value === "CANCELLED" ||
-    normalizedStatus.value === "CANCELED"
-  ) {
-    return "Cancelled";
-  }
-
-  if (isRejected.value) {
-    return "Rejected";
-  }
+  if (isConfirmed.value) return "Confirmed";
+  if (isCompleted.value) return "Completed";
+  if (isCancelled.value) return "Cancelled";
+  if (isRejected.value) return "Rejected";
 
   return "Pending";
 });
 
 const statusTitle = computed(() => {
-  if (isConfirmed.value) {
-    return "Booking Confirmed";
-  }
-
-  if (isCompleted.value) {
-    return "Booking Completed";
-  }
-
-  if (
-    normalizedStatus.value === "CANCELLED" ||
-    normalizedStatus.value === "CANCELED"
-  ) {
-    return "Booking Cancelled";
-  }
-
-  if (isRejected.value) {
-    return "Booking Update";
-  }
+  if (isConfirmed.value) return "Booking Confirmed";
+  if (isCompleted.value) return "Booking Completed";
+  if (isCancelled.value) return "Booking Cancelled";
+  if (isRejected.value) return "Booking Update";
 
   return "Booking Received";
 });
@@ -353,10 +330,7 @@ const statusDescription = computed(() => {
     return "Your booking has been completed. Thank you for choosing Explore Koh Rong.";
   }
 
-  if (
-    normalizedStatus.value === "CANCELLED" ||
-    normalizedStatus.value === "CANCELED"
-  ) {
+  if (isCancelled.value) {
     return "This booking has been cancelled.";
   }
 
@@ -424,9 +398,7 @@ const statusDotClass = computed(() => {
 function formatPrice(value) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-
     currency: "USD",
-
     minimumFractionDigits: 2,
   }).format(Number(value || 0));
 }
@@ -443,8 +415,7 @@ function formatDate(dateValue) {
   }
 
   /*
-   * Prevent YYYY-MM-DD
-   * timezone shift.
+   * Prevent YYYY-MM-DD timezone shifts.
    */
 
   if (/^\d{4}-\d{2}-\d{2}$/.test(String(dateValue))) {
@@ -454,13 +425,9 @@ function formatDate(dateValue) {
 
     return new Intl.DateTimeFormat("en-US", {
       weekday: "short",
-
       day: "2-digit",
-
       month: "short",
-
       year: "numeric",
-
       timeZone: "UTC",
     }).format(date);
   }
@@ -473,11 +440,8 @@ function formatDate(dateValue) {
 
   return new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
-
     month: "short",
-
     year: "numeric",
-
     timeZone: "Asia/Phnom_Penh",
   }).format(date);
 }
@@ -500,9 +464,7 @@ function formatTime(value) {
   }
 
   let hour = Number(match[1]);
-
   const minute = match[2];
-
   const period = hour >= 12 ? "PM" : "AM";
 
   hour = hour % 12 || 12;
@@ -512,19 +474,17 @@ function formatTime(value) {
 
 /*
 |--------------------------------------------------------------------------
-| COPY BOOKING REFERENCE
+| COPY INVOICE NUMBER
 |--------------------------------------------------------------------------
 */
 
-async function copyBookingId() {
-  const text = String(bookingReference.value || "");
-
-  if (!text || text === "-") {
+async function copyBookingNumber() {
+  if (!hasBookingNumber.value) {
     return;
   }
 
   try {
-    await navigator.clipboard.writeText(text);
+    await navigator.clipboard.writeText(bookingNumber.value);
 
     copied.value = true;
 
@@ -532,7 +492,7 @@ async function copyBookingId() {
       copied.value = false;
     }, 1500);
   } catch (err) {
-    console.warn("Unable to copy booking ID.", err);
+    console.warn("Unable to copy invoice number.", err);
   }
 }
 
@@ -540,34 +500,42 @@ async function copyBookingId() {
 |--------------------------------------------------------------------------
 | LOAD BOOKING
 |--------------------------------------------------------------------------
+|
+| Important:
+|
+| GET /bookings/:id still uses MongoDB _id.
+|
+| The API response must include booking_number.
+|
 */
 
 async function loadBooking() {
   loading.value = true;
-
   error.value = "";
-
   booking.value = null;
+  copied.value = false;
 
   const id = String(route.params?.id || "").trim();
 
   if (!id) {
     error.value = "Booking ID is missing.";
-
     loading.value = false;
-
     return;
   }
 
   try {
     const response = await api.get(`/bookings/${id}`);
 
-    booking.value =
+    const item =
       response?.data?.booking || response?.data?.data || response?.data || null;
 
-    if (!booking.value?._id) {
+    if (!item?._id) {
       throw new Error("Booking not found.");
     }
+
+    booking.value = item;
+
+    console.log("[BOOKING NUMBER]", booking.value.booking_number);
   } catch (err) {
     console.error("[BOOKING DETAIL ERROR]", err);
 
@@ -582,6 +550,21 @@ async function loadBooking() {
 
 /*
 |--------------------------------------------------------------------------
+| ROUTE CHANGES
+|--------------------------------------------------------------------------
+*/
+
+watch(
+  () => route.params?.id,
+  (newId, oldId) => {
+    if (String(newId || "") !== String(oldId || "")) {
+      loadBooking();
+    }
+  },
+);
+
+/*
+|--------------------------------------------------------------------------
 | INIT
 |--------------------------------------------------------------------------
 */
@@ -591,9 +574,7 @@ onMounted(loadBooking);
 
 <template>
   <main class="min-h-screen bg-surface-soft pb-16">
-    <!-- ======================================================
-         BREADCRUMB
-    ======================================================= -->
+    <!-- BREADCRUMB -->
 
     <section class="border-b border-border bg-white">
       <div class="page py-4">
@@ -618,23 +599,17 @@ onMounted(loadBooking);
       </div>
     </section>
 
-    <!-- ======================================================
-         LOADING
-    ======================================================= -->
+    <!-- LOADING -->
 
     <section v-if="loading" class="page py-10">
       <div class="mx-auto max-w-4xl space-y-5">
         <div class="h-36 animate-pulse rounded-2xl bg-slate-200" />
-
         <div class="h-72 animate-pulse rounded-2xl bg-slate-200" />
-
         <div class="h-24 animate-pulse rounded-2xl bg-slate-200" />
       </div>
     </section>
 
-    <!-- ======================================================
-         ERROR
-    ======================================================= -->
+    <!-- ERROR -->
 
     <section v-else-if="error" class="page py-16">
       <div
@@ -656,25 +631,20 @@ onMounted(loadBooking);
 
         <button
           type="button"
-          class="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary-600 px-5 text-sm font-semibold text-white transition hover:bg-primary-700"
+          class="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary-500 px-5 text-sm font-semibold text-white transition hover:bg-primary-600"
           @click="router.push('/my-bookings')"
         >
           <Icon icon="ri:arrow-left-line" />
-
           My Bookings
         </button>
       </div>
     </section>
 
-    <!-- ======================================================
-         DETAILS
-    ======================================================= -->
+    <!-- BOOKING DETAILS -->
 
     <section v-else-if="booking" class="page py-8 sm:py-10">
       <div class="mx-auto max-w-4xl space-y-5">
-        <!-- ==================================================
-             STATUS
-        =================================================== -->
+        <!-- STATUS CARD -->
 
         <div
           class="rounded-2xl border border-border bg-white p-5 shadow-sm sm:p-6"
@@ -683,16 +653,12 @@ onMounted(loadBooking);
             class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
           >
             <div class="flex items-start gap-4">
-              <!-- STATUS ICON -->
-
               <div
                 class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full"
                 :class="statusIconClass"
               >
                 <Icon :icon="statusIcon" class="text-2xl" />
               </div>
-
-              <!-- STATUS TEXT -->
 
               <div>
                 <h1 class="text-xl font-bold text-heading sm:text-2xl">
@@ -707,8 +673,6 @@ onMounted(loadBooking);
               </div>
             </div>
 
-            <!-- STATUS BADGE -->
-
             <span
               class="inline-flex w-fit shrink-0 items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold"
               :class="statusBadgeClass"
@@ -720,22 +684,16 @@ onMounted(loadBooking);
           </div>
         </div>
 
-        <!-- ==================================================
-             MAIN BOOKING CARD
-        =================================================== -->
+        <!-- MAIN BOOKING CARD -->
 
         <div
           class="overflow-hidden rounded-2xl border border-border bg-white shadow-sm"
         >
-          <!-- =================================================
-               SERVICE
-          ================================================== -->
+          <!-- SERVICE -->
 
           <div
             class="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:p-6"
           >
-            <!-- IMAGE -->
-
             <div
               class="h-28 w-full shrink-0 overflow-hidden rounded-xl bg-slate-100 sm:h-24 sm:w-32"
             >
@@ -751,11 +709,9 @@ onMounted(loadBooking);
               </div>
             </div>
 
-            <!-- SERVICE INFORMATION -->
-
             <div class="min-w-0 flex-1">
               <p
-                class="text-xs font-semibold uppercase tracking-[0.15em] text-primary-600"
+                class="text-xs font-semibold uppercase tracking-[0.15em] text-primary-500"
               >
                 Service
               </p>
@@ -772,39 +728,34 @@ onMounted(loadBooking);
               </p>
             </div>
 
-            <!-- TOTAL -->
-
             <div class="sm:text-right">
               <p class="text-xs text-black">Total</p>
 
-              <p class="mt-1 text-2xl font-bold text-primary-600">
+              <p class="mt-1 text-2xl font-bold text-primary-500">
                 {{ formatPrice(booking.total_price) }}
               </p>
             </div>
           </div>
 
-          <!-- =================================================
-               REFERENCE
-          ================================================== -->
+          <!-- NEW INVOICE NUMBER -->
 
-          <div class="border-t border-border bg-surface-soft px-5 py-3 sm:px-6">
-            <div class="flex items-center justify-between gap-3">
+          <div class="border-t border-border bg-surface-soft px-5 py-4 sm:px-6">
+            <div class="flex flex-wrap items-center justify-between gap-3">
               <div class="min-w-0">
-                <p class="text-xs text-black">Booking Reference</p>
+                <p class="text-xs font-medium text-black">Invoice Number</p>
 
                 <p
-                  class="mt-0.5 truncate font-mono text-sm font-medium text-heading"
+                  class="mt-1 break-words font-mono text-lg font-bold tracking-wide text-heading"
                 >
-                  {{ bookingReference }}
+                  {{ bookingNumber }}
                 </p>
               </div>
 
-              <!-- COPY -->
-
               <button
                 type="button"
-                class="inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border bg-white px-3 text-xs font-semibold text-heading transition hover:border-primary-300 hover:text-primary-600"
-                @click="copyBookingId"
+                :disabled="!hasBookingNumber"
+                class="inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border bg-white px-3 text-xs font-semibold text-heading transition hover:border-primary-300 hover:text-primary-500 disabled:cursor-not-allowed disabled:opacity-50"
+                @click="copyBookingNumber"
               >
                 <Icon :icon="copied ? 'ri:check-line' : 'ri:file-copy-line'" />
 
@@ -813,21 +764,17 @@ onMounted(loadBooking);
             </div>
           </div>
 
-          <!-- =================================================
-               BOOKING INFORMATION
-          ================================================== -->
+          <!-- BOOKING INFORMATION -->
 
           <div class="border-t border-border p-5 sm:p-6">
             <h3 class="font-semibold text-heading">Booking Information</h3>
 
             <div class="mt-5 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-              <!-- =============================================
-                   DATE
-              ============================================== -->
+              <!-- DATE -->
 
               <div class="flex items-start gap-3">
                 <div
-                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600"
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-500"
                 >
                   <Icon icon="ri:calendar-line" />
                 </div>
@@ -843,13 +790,11 @@ onMounted(loadBooking);
                 </div>
               </div>
 
-              <!-- =============================================
-                   TIME
-              ============================================== -->
+              <!-- TIME -->
 
               <div class="flex items-start gap-3">
                 <div
-                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600"
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-500"
                 >
                   <Icon icon="ri:time-line" />
                 </div>
@@ -865,13 +810,11 @@ onMounted(loadBooking);
                 </div>
               </div>
 
-              <!-- =============================================
-                   GUESTS
-              ============================================== -->
+              <!-- GUESTS -->
 
               <div class="flex items-start gap-3">
                 <div
-                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600"
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-500"
                 >
                   <Icon icon="ri:group-line" />
                 </div>
@@ -885,13 +828,11 @@ onMounted(loadBooking);
                 </div>
               </div>
 
-              <!-- =============================================
-                   PAYMENT
-              ============================================== -->
+              <!-- PAYMENT -->
 
               <div class="flex items-start gap-3">
                 <div
-                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600"
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-500"
                 >
                   <Icon icon="ri:bank-card-line" />
                 </div>
@@ -905,13 +846,11 @@ onMounted(loadBooking);
                 </div>
               </div>
 
-              <!-- =============================================
-                   CHANNEL
-              ============================================== -->
+              <!-- CHANNEL -->
 
               <div class="flex items-start gap-3">
                 <div
-                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600"
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-500"
                 >
                   <Icon :icon="channelIcon" />
                 </div>
@@ -928,9 +867,7 @@ onMounted(loadBooking);
           </div>
         </div>
 
-        <!-- ==================================================
-             REJECTION
-        =================================================== -->
+        <!-- REJECTION -->
 
         <div
           v-if="isRejected && rejectionReason"
@@ -952,16 +889,14 @@ onMounted(loadBooking);
           </div>
         </div>
 
-        <!-- ==================================================
-             SPECIAL REQUEST
-        =================================================== -->
+        <!-- SPECIAL REQUEST -->
 
         <div
           v-if="bookingNote"
           class="rounded-2xl border border-border bg-white p-5 shadow-sm sm:p-6"
         >
           <div class="flex items-center gap-3">
-            <Icon icon="ri:sticky-note-line" class="text-xl text-primary-600" />
+            <Icon icon="ri:sticky-note-line" class="text-xl text-primary-500" />
 
             <h3 class="font-semibold text-heading">Special Request</h3>
           </div>
@@ -971,23 +906,17 @@ onMounted(loadBooking);
           </p>
         </div>
 
-        <!-- ==================================================
-             CUSTOMER
-        =================================================== -->
+        <!-- CUSTOMER INFORMATION -->
 
         <div
           v-if="hasCustomerInformation"
           class="rounded-2xl border border-border bg-white p-5 shadow-sm sm:p-6"
         >
-          <!-- HEADER -->
-
           <div class="flex items-center gap-3">
-            <Icon icon="ri:user-3-line" class="text-xl text-primary-600" />
+            <Icon icon="ri:user-3-line" class="text-xl text-primary-500" />
 
             <h3 class="font-semibold text-heading">Customer Information</h3>
           </div>
-
-          <!-- INFORMATION -->
 
           <div class="mt-5 grid gap-4 sm:grid-cols-3">
             <!-- NAME -->
@@ -1022,32 +951,24 @@ onMounted(loadBooking);
           </div>
         </div>
 
-        <!-- ==================================================
-             ACTIONS
-        =================================================== -->
+        <!-- ACTIONS -->
 
         <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
-          <!-- BOOK ANOTHER -->
-
           <button
             type="button"
-            class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-white px-5 text-sm font-semibold text-heading transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
+            class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-white px-5 text-sm font-semibold text-heading transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-500"
             @click="router.push('/services')"
           >
             <Icon icon="ri:add-circle-line" />
-
             Book Another Service
           </button>
 
-          <!-- MY BOOKINGS -->
-
           <button
             type="button"
-            class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary-600 px-5 text-sm font-semibold text-white transition hover:bg-primary-700"
+            class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary-500 px-5 text-sm font-semibold text-white transition hover:bg-primary-600"
             @click="router.push('/my-bookings')"
           >
             <Icon icon="ri:file-list-3-line" />
-
             My Bookings
           </button>
         </div>
